@@ -5,7 +5,7 @@ import Icon from '@/components/Icon';
 export const metadata = { title: 'Collections' };
 export default function Collections() {
   return (
-    <div className="container section">
+    <div className="container section  max-w-7xl mx-auto px-9">
       <div className="page-intro compact">
         <p className="eyebrow">FOUR WAYS TO FIND YOUR AURA</p>
         <h1>The collections.</h1>

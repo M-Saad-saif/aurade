@@ -19,12 +19,12 @@ export async function POST(request) {
   const { password } = await request.json().catch(() => ({}));
 
   if (typeof password !== "string" || !safeEqual(password, expected)) {
-    await new Promise((resolve) => setTimeout(resolve, 600)); // slow down guessing
+    await new Promise((resolve) => setTimeout(resolve, 600));
     return NextResponse.json({ error: "Incorrect password." }, { status: 401 });
   }
 
   const response = NextResponse.json({ ok: true });
-  s
+
   response.cookies.set(ADMIN_COOKIE, createToken(), cookieOptions);
   return response;
 }

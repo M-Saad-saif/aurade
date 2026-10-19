@@ -3,16 +3,19 @@ import Link from 'next/link';
 import { useStore } from './StoreProvider';
 import ProductCard from './ProductCard';
 import Icon from './Icon';
+
 export default function WishlistView() {
   const { wishlist, ready, findProduct } = useStore();
+
   if (!ready)
     return (
       <div className="container empty-state" role="status">
         Loading your wishlist…
       </div>
     );
+
   return (
-    <div className="container section">
+    <div className="container section  max-w-7xl mx-auto px-9">
       <div className="page-intro compact">
         <p className="eyebrow">KEEP A LITTLE INSPIRATION</p>
         <h1>Your wishlist.</h1>

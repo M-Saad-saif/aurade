@@ -1,31 +1,35 @@
-import Link from 'next/link';
-import Newsletter from './Newsletter';
+import Link from "next/link";
+import Newsletter from "./Newsletter";
+import Image from "next/image";
+
 const groups = [
   [
-    'Explore',
+    "Explore",
     [
-      ['All watches', '/shop'],
-      ['Collections', '/collections'],
-      ['Wishlist', '/wishlist'],
-      ['Shopping bag', '/cart'],
+      ["All watches", "/shop"],
+      ["Collections", "/collections"],
+      ["Wishlist", "/wishlist"],
+      ["Shopping bag", "/cart"],
     ],
   ],
+
   [
-    'Aurade',
+    "Aurade",
     [
-      ['Our story', '/about'],
-      ['The journal', '/journal'],
-      ['Sell / trade', '/trade'],
-      ['Contact', '/contact'],
+      ["Our story", "/about"],
+      ["The journal", "/journal"],
+      ["Sell / trade", "/trade"],
+      ["Contact", "/contact"],
     ],
   ],
+
   [
-    'Information',
+    "Information",
     [
-      ['Shipping', '/support/shipping'],
-      ['Returns', '/support/returns'],
-      ['Watch care', '/support/care'],
-      ['FAQ', '/support/faq'],
+      ["Shipping", "/support/shipping"],
+      ["Returns", "/support/returns"],
+      ["Watch care", "/support/care"],
+      ["FAQ", "/support/faq"],
     ],
   ],
 ];
@@ -33,13 +37,35 @@ export default function Footer() {
   return (
     <>
       <Newsletter />
-      <footer className="site-footer">
+
+      <footer className="site-footer max-w-7xl mx-auto px-9">
         <div className="container footer-grid">
           <div>
-            <Link href="/" className="wordmark">
-              AURADE
+            <Link
+              href="/"
+              aria-label="Aurade home"
+              className="group flex items-center gap-3 text-[#123c35] transition-opacity hover:opacity-80"
+            >
+              <Image
+                src="/images/logo.png"
+                alt="Aurade logo"
+                width={36}
+                height={36}
+                className="h-9 w-9 shrink-0 rounded-[8px] object-contain"
+                priority
+              />
+
+              <div className="flex flex-col justify-center">
+                <span className="text-[1.15rem] font-semibold leading-none tracking-[0.2em] text-[#123c35]">
+                  URADE
+                </span>
+
+                <span className="mt-1.5 text-[0.55rem] font-medium uppercase leading-none tracking-[0.18em] text-[#5e7a70]">
+                  Time, with an aura
+                </span>
+              </div>
             </Link>
-            <p>Time, with an aura.</p>
+
             <p className="muted footer-note">
               A thoughtfully designed watch storefront.
               <br />
@@ -62,7 +88,6 @@ export default function Footer() {
           <div>
             <Link href="/support/privacy">Privacy</Link>
             <Link href="/support/terms">Terms</Link>
-            <span>USD $</span>
           </div>
         </div>
       </footer>

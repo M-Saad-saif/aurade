@@ -5,10 +5,12 @@ import { cartSubtotal, lineKey } from '@/lib/cart';
 import { formatMoney, shippingFor } from '@/lib/catalog';
 import WatchImage from './WatchImage';
 import Icon from './Icon';
+
 export function OrderSummary({ cart, children }) {
   const { findProduct } = useStore();
   const subtotal = cartSubtotal(cart, findProduct);
   const shipping = shippingFor(subtotal);
+
   return (
     <aside className="order-summary">
       <p className="eyebrow">THE DETAILS</p>
@@ -44,14 +46,17 @@ export function OrderSummary({ cart, children }) {
     </aside>
   );
 }
+
 export default function CartView() {
   const { cart, dispatch, ready, notify, findProduct } = useStore();
+
   if (!ready)
     return (
       <div className="container empty-state" role="status">
         Loading your bag…
       </div>
     );
+
   if (!cart.length)
     return (
       <div className="container empty-state">
@@ -64,8 +69,9 @@ export default function CartView() {
         </Link>
       </div>
     );
+
   return (
-    <div className="container section">
+    <div className="container section  max-w-7xl mx-auto px-9" >
       <div className="section-heading">
         <div>
           <p className="eyebrow">YOUR CONSIDERED SELECTION</p>
@@ -143,6 +149,7 @@ export default function CartView() {
             );
           })}
         </div>
+
         <OrderSummary cart={cart}>
           <Link href="/checkout" className="button full-width">
             Continue to demo checkout <Icon name="arrow" size={17} />

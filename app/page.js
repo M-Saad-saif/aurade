@@ -5,6 +5,7 @@ import ProductCard from "@/components/ProductCard";
 import WatchImage from "@/components/WatchImage";
 import SectionHeading from "@/components/SectionHeading";
 import Icon from "@/components/Icon";
+
 export default async function Home() {
   const catalog = await getCatalog();
   return (
@@ -26,7 +27,8 @@ export default async function Home() {
             </p>
 
             <h1 className="mb-6 text-[3.5rem] font-normal leading-[1.05] tracking-[-1px] text-white sm:text-[4.5rem]">
-              Time, with an <em className="font-serif italic text-[#e1c27f]">AURA.</em>
+              Time, with an{" "}
+              <em className="font-serif italic text-[#e1c27f]">AURA.</em>
             </h1>
 
             <p className="mb-10 max-w-md text-[1rem] leading-relaxed text-[#d8e3dd] sm:text-[1.1rem]">
@@ -132,12 +134,18 @@ export default async function Home() {
         </div>
       </section>
 
-      <section className="section container mx-auto max-w-7xl px-8 ">
-        <div className="center-heading">
-          <p className="eyebrow">THE DETAILS MATTER</p>
-          <h2>A more considered experience.</h2>
+      <section className="mx-auto max-w-7xl px-6 py-16 sm:py-20 lg:px-8">
+        {/* Centered Heading */}
+        <div className="mx-auto mb-14 max-w-2xl text-center">
+          <p className="mb-3 text-[0.68rem] font-medium uppercase tracking-[4px] text-[#5e7a70]">
+            THE DETAILS MATTER
+          </p>
+          <h2 className="text-[2rem] font-semibold leading-[1.1] tracking-[-0.5px] text-[#123c35] sm:text-[2.5rem]">
+            A more considered experience.
+          </h2>
         </div>
-        <div className="benefit-grid">
+
+        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4 lg:gap-10">
           {[
             [
               "diamond",
@@ -160,10 +168,20 @@ export default async function Home() {
               "Illustrative products. Transparent demo checkout.",
             ],
           ].map(([icon, title, copy]) => (
-            <div key={title}>
-              <Icon name={icon} size={30} />
-              <h3>{title}</h3>
-              <p>{copy}</p>
+            <div
+              key={title}
+              className="group flex flex-col items-center text-center"
+            >
+              <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-full bg-[#f0f5f2] text-[#123c35] transition-all duration-300 group-hover:bg-[#123c35] group-hover:text-[#e1c27f]">
+                <Icon name={icon} size={26} />
+              </div>
+
+              <h3 className="mb-2 text-[1rem] font-semibold tracking-[-0.2px] text-[#123c35]">
+                {title}
+              </h3>
+              <p className="max-w-[240px] text-[0.85rem] leading-relaxed text-[#5e7a70]">
+                {copy}
+              </p>
             </div>
           ))}
         </div>

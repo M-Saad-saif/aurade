@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useStore } from "./StoreProvider";
 import Icon from "./Icon";
+import Image from "next/image";
 
 const links = [
   ["Home", "/"],
@@ -18,6 +19,9 @@ export default function Header() {
   const { cart, wishlist, ready } = useStore();
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
+
+  const [cartBlink, setCartBlink] = useState(false);
+  const [wishlistBlink, setWishlistBlink] = useState(false);
 
   useEffect(() => {
     setOpen(false);
@@ -43,6 +47,24 @@ export default function Header() {
   const count = ready
     ? cart.reduce((total, item) => total + item.quantity, 0)
     : 0;
+
+  const wishlistCount = ready ? wishlist.length : 0;
+
+  useEffect(() => {
+    if (count > 0) {
+      setCartBlink(true);
+      const timer = setTimeout(() => setCartBlink(false), 600);
+      return () => clearTimeout(timer);
+    }
+  }, [count]);
+
+  useEffect(() => {
+    if (wishlistCount > 0) {
+      setWishlistBlink(true);
+      const timer = setTimeout(() => setWishlistBlink(false), 600);
+      return () => clearTimeout(timer);
+    }
+  }, [wishlistCount]);
 
   const isActive = (href) =>
     href === "/" ? pathname === "/" : pathname.startsWith(href);
@@ -87,14 +109,26 @@ export default function Header() {
             <Link
               href="/"
               aria-label="Aurade home"
-              className="flex flex-col leading-none text-[#123c35] transition-opacity hover:opacity-80"
+              className="group flex items-center gap-3 text-[#123c35] transition-opacity hover:opacity-80"
             >
-              <span className="text-[1.15rem] font-semibold tracking-[3px]">
-                A.U.R.A.D.E
-              </span>
-              <span className="mt-1 text-[0.52rem] font-medium uppercase tracking-[3px] text-[#5e7a70]">
-                Time, with an aura
-              </span>
+              <Image
+                src="/images/logo.png"
+                alt="Aurade logo"
+                width={36}
+                height={36}
+                className="h-9 w-9 shrink-0 rounded-[8px] object-contain"
+                priority
+              />
+
+              <div className="flex flex-col justify-center">
+                <span className="text-[1.15rem] font-semibold leading-none tracking-[0.2em] text-[#123c35]">
+                  U.R.A.D.E
+                </span>
+
+                <span className="mt-1.5 text-[0.55rem] font-medium uppercase leading-none tracking-[0.18em] text-[#5e7a70]">
+                  Time, with an aura
+                </span>
+              </div>
             </Link>
           </div>
 
@@ -129,7 +163,6 @@ export default function Header() {
             })}
           </nav>
 
-          {/* ---------- RIGHT: actions ---------- */}
           <div className="flex items-center justify-end gap-1">
             <Link
               href="/shop?focus=search"
@@ -141,27 +174,45 @@ export default function Header() {
 
             <Link
               href="/wishlist"
-              className="relative flex h-10 w-10 items-center justify-center rounded-full text-[#123c35] transition-colors hover:bg-[#123c35]/[0.06]"
-              aria-label={`Wishlist, ${ready ? wishlist.length : 0} watches`}
+              className="relative flex h-10 w-10 items-center justify-center rounded-full text-[#123c35] transition-colors hover:bg-[#123c35]/6"
+              aria-label={`Wishlist, ${wishlistCount} watches`}
             >
               <Icon name="heart" />
-              {ready && wishlist.length > 0 && (
-                <span className="absolute -right-0.5 -top-0.5 flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-[#123c35] px-1 text-[0.6rem] font-semibold text-[#e1c27f] ring-2 ring-[#f0f5f2]">
-                  {wishlist.length}
-                </span>
+              {wishlistCount > 0 && (
+                <>
+                  {wishlistBlink && (
+                    <span className="absolute -right-0.5 -top-0.5 h-[18px] min-w-[18px] animate-ping rounded-full bg-[#e1c27f] opacity-75" />
+                  )}
+                  <span
+                    className={`absolute -right-0.5 -top-0.5 flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-[#123c35] px-1 text-[0.6rem] font-semibold text-[#e1c27f] ring-2 ring-[#f0f5f2] transition-transform duration-300 ${
+                      wishlistBlink ? "scale-125" : "scale-100"
+                    }`}
+                  >
+                    {wishlistCount}
+                  </span>
+                </>
               )}
             </Link>
 
             <Link
               href="/cart"
-              className="relative flex h-10 w-10 items-center justify-center rounded-full text-[#123c35] transition-colors hover:bg-[#123c35]/[0.06]"
+              className="relative flex h-10 w-10 items-center justify-center rounded-full text-[#123c35] transition-colors hover:bg-[#123c35]/6"
               aria-label={`Shopping bag, ${count} items`}
             >
               <Icon name="bag" />
               {count > 0 && (
-                <span className="absolute -right-0.5 -top-0.5 flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-[#123c35] px-1 text-[0.6rem] font-semibold text-[#e1c27f] ring-2 ring-[#f0f5f2]">
-                  {count}
-                </span>
+                <>
+                  {cartBlink && (
+                    <span className="absolute -right-0.5 -top-0.5 h-[18px] min-w-[18px] animate-ping rounded-full bg-[#e1c27f] opacity-75" />
+                  )}
+                  <span
+                    className={`absolute -right-0.5 -top-0.5 flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-[#123c35] px-1 text-[0.6rem] font-semibold text-[#e1c27f] ring-2 ring-[#f0f5f2] transition-transform duration-300 ${
+                      cartBlink ? "scale-125" : "scale-100"
+                    }`}
+                  >
+                    {count}
+                  </span>
+                </>
               )}
             </Link>
           </div>
@@ -169,7 +220,6 @@ export default function Header() {
       </header>
 
       {/* ===== MOBILE DRAWER ===== */}
-      {/* Backdrop */}
       <div
         aria-hidden="true"
         onClick={() => setOpen(false)}
