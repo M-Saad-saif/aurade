@@ -187,7 +187,7 @@ export default function ProductDetails({ product }) {
             <p className="mt-6 text-[1.85rem] font-semibold tracking-[-0.5px] text-[#123c35]">
               {formatMoney(product.price)}{" "}
               <span className="text-[0.8rem] font-medium uppercase tracking-[2px] text-[#5e7a70]">
-                USD
+                 PKR
               </span>
             </p>
 
@@ -305,7 +305,7 @@ export default function ProductDetails({ product }) {
               >
                 <Icon name="truck" />
                 <span className="border-b border-transparent transition-colors group-hover:border-[#123c35]">
-                  Shipping: $15, free from $300
+                  Shipping: {formatMoney(417000)}, free from {formatMoney(8340000)}
                 </span>
               </Link>
               <Link

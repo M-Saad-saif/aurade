@@ -202,7 +202,7 @@ export default function AdminWatchManager({ watches }) {
             />
           </label>
           <label>
-            <span className={LABEL_CLASS}>Price (USD)</span>
+            <span className={LABEL_CLASS}>Price (PKR)</span>
             <input
               className={FIELD_CLASS}
               name="price"
@@ -210,7 +210,7 @@ export default function AdminWatchManager({ watches }) {
               required
               min="0.01"
               step="0.01"
-              placeholder="89.00"
+              placeholder="42000.00"
             />
           </label>
           <label>

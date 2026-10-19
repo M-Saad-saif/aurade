@@ -11,8 +11,8 @@ const links = [
   ["Home", "/"],
   ["Shop", "/shop"],
   ["Collections", "/collections"],
-  ["Our story", "/about"],
-  ["Journal", "/journal"],
+  ["Gallery", "/gallery"],
+  ["About", "/about"],
 ];
 
 export default function Header() {

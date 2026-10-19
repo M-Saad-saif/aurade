@@ -6,7 +6,7 @@ import Watch, { WATCH_CATEGORIES } from "@/models/Watch";
 
 export const runtime = "nodejs";
 
-const MAX_IMAGE_BYTES = 4 * 1024 * 1024; // keeps us under Vercel's 4.5 MB request limit
+const MAX_IMAGE_BYTES = 4 * 1024 * 1024; 
 const MAX_IMAGES = 3;
 const ALLOWED_IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp"];
 const MAX_VIDEO_BYTES = 25 * 1024 * 1024;
@@ -27,7 +27,7 @@ export async function POST(request) {
   const title = String(form.get("title") || "").trim();
   const description = String(form.get("description") || "").trim();
   const category = String(form.get("category") || "").trim();
-  const priceUsd = Number(form.get("price"));
+  const pricePkr = Number(form.get("price"));
   const files = form
     .getAll("images")
     .filter((entry) => entry && typeof entry !== "string" && entry.size > 0);
@@ -52,17 +52,24 @@ export async function POST(request) {
 
   if (!title || title.length > 120)
     return fail("Title is required (max 120 characters).");
+
   if (!description || description.length > 2000)
     return fail("Description is required (max 2000 characters).");
+
   if (!WATCH_CATEGORIES.includes(category))
     return fail("Choose a valid collection.");
-  if (!Number.isFinite(priceUsd) || priceUsd < 0.01 || priceUsd > 1_000_000)
+
+  if (!Number.isFinite(pricePkr) || pricePkr < 0.01 || pricePkr > 278_000_000)
     return fail("Enter a valid price.");
+
   if (!Number.isInteger(stock) || stock < 0 || stock > MAX_STOCK)
     return fail("Enter a valid stock quantity (0 or more).");
+
   if (files.length === 0) return fail("Please choose at least one image.");
+
   if (files.length > MAX_IMAGES)
     return fail(`Upload up to ${MAX_IMAGES} images.`);
+
   for (const file of files) {
     if (!ALLOWED_IMAGE_TYPES.includes(file.type))
       return fail("Images must be JPG, PNG or WebP.");
@@ -79,7 +86,7 @@ export async function POST(request) {
       return fail("Clip must be 25 MB or smaller.");
   }
 
-  const uploaded = []; // { publicId, resourceType } used to roll back orphaned assets
+  const uploaded = []; 
   try {
     const images = [];
     for (const file of files) {
@@ -119,7 +126,7 @@ export async function POST(request) {
       straps: straps.length ? straps : ["Standard"],
       stock,
       badge,
-      price: Math.round(priceUsd * 100),
+      price: Math.round(pricePkr * 100),
       images,
       imageUrl: images[0].url,
       imagePublicId: images[0].publicId,
@@ -132,8 +139,6 @@ export async function POST(request) {
       { status: 201 },
     );
   } catch (error) {
-    console.error("Create watch failed:", error);
-    // Avoid orphaned assets if any upload succeeded.
     await Promise.all(
       uploaded.map((asset) =>
         deleteMedia(asset.publicId, asset.resourceType).catch(() => {}),

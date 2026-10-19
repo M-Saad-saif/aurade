@@ -25,6 +25,5 @@ export default async function AdminPage() {
     imageCount: doc.images?.length || 1,
     hasVideo: Boolean(doc.videoUrl),
   }));
-
   return <AdminWatchManager watches={watches} />;
 }

@@ -1,4 +1,5 @@
 'use client';
+
 import {
   createContext,
   useCallback,
@@ -11,7 +12,9 @@ import {
 } from 'react';
 import { createLookup, initialState, shoppingReducer, STORAGE_KEY } from '@/lib/cart';
 import { getProduct } from '@/lib/catalog';
+
 const StoreContext = createContext(null);
+
 export function StoreProvider({ catalog = [], children }) {
   const lookup = useMemo(() => createLookup(catalog), [catalog]);
   const [state, dispatch] = useReducer(
@@ -24,10 +27,12 @@ export function StoreProvider({ catalog = [], children }) {
   const timer = useRef(null);
   const findProduct = useCallback((id) => lookup(id) || getProduct(id), [lookup]);
   const notify = useCallback((message) => {
+
     setNotice(message);
     clearTimeout(timer.current);
     timer.current = setTimeout(() => setNotice(''), 3500);
   }, []);
+
   useEffect(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
@@ -35,7 +40,9 @@ export function StoreProvider({ catalog = [], children }) {
     } catch {
       setStorageError(true);
     }
+
     setReady(true);
+
     const sync = (event) => {
       if (event.key !== STORAGE_KEY && event.key !== null) return;
       try {
@@ -47,12 +54,15 @@ export function StoreProvider({ catalog = [], children }) {
         setStorageError(true);
       }
     };
+
     window.addEventListener('storage', sync);
+
     return () => {
       window.removeEventListener('storage', sync);
       clearTimeout(timer.current);
     };
   }, []);
+  
   useEffect(() => {
     if (!ready) return;
     try {
@@ -63,6 +73,7 @@ export function StoreProvider({ catalog = [], children }) {
       setStorageError(true);
     }
   }, [state, ready]);
+
   return (
     <StoreContext.Provider
       value={{ ...state, products: catalog, findProduct, dispatch, ready, notify }}
@@ -79,6 +90,7 @@ export function StoreProvider({ catalog = [], children }) {
     </StoreContext.Provider>
   );
 }
+
 export function useStore() {
   const store = useContext(StoreContext);
   if (!store) throw new Error('useStore must be used within StoreProvider');

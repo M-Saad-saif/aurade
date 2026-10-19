@@ -1,13 +1,40 @@
 import Link from "next/link";
 import { collections, photos } from "@/lib/catalog";
-import { getCatalog } from "@/lib/watches";
+import { getCatalog, getStoreWatches } from "@/lib/watches";
 import ProductCard from "@/components/ProductCard";
 import WatchImage from "@/components/WatchImage";
 import SectionHeading from "@/components/SectionHeading";
 import Icon from "@/components/Icon";
+import CardSwap from "@/components/CardSwap";
+import Newsletter from "@/components/Newsletter";
+
+// 1. Moved the shuffle function outside the component
+function shuffleArray(array) {
+  const shuffled = [...array];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+}
 
 export default async function Home() {
-  const catalog = await getCatalog();
+  const [catalog, uploadedWatches] = await Promise.all([
+    getCatalog(),
+    getStoreWatches(),
+  ]);
+
+  const swapItems = uploadedWatches.flatMap((watch) =>
+    watch.images.map((image, index) => ({
+      title:
+        watch.images.length > 1 ? `${watch.name} (${index + 1})` : watch.name,
+      image,
+    })),
+  );
+
+  const shuffledSwapItems1 = shuffleArray(swapItems);
+  const shuffledSwapItems2 = shuffleArray(swapItems);
+
   return (
     <>
       <section className="relative flex min-h-[85vh] w-full items-center overflow-hidden bg-[#0a1412] lg:min-h-[90vh]">
@@ -18,7 +45,7 @@ export default async function Home() {
           priority
         />
 
-        <div className="absolute inset-0 bg-[#0a1412]/10 bg-linear-to-r from-[#0a1412]/100 via-[#0a1412]/10 to-transparent" />
+        <div className="absolute inset-0 bg-[#0a1412]/10 bg-linear-to-r from-[#0a1412] via-[#0a1412]/10 to-transparent" />
 
         <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-col px-9 py-24 lg:px-16">
           <div className="max-w-xl">
@@ -38,7 +65,7 @@ export default async function Home() {
 
             <Link
               href="/shop"
-              className="flex h-[40px] w-[37%] cursor-pointer items-center justify-center gap-[8px] rounded-[40px] border-none bg-gradient-to-r from-[#bf953f] via-[#fcf6ba] via-[#b38728] via-[#fbf5b7] to-[#aa771c] bg-[length:200%_200%] font-sans text-[14px] font-semibold text-[rgb(65,54,0)] shadow-[5px_5px_10px_rgba(0,0,0,0.144)] transition-all duration-[3000ms] hover:scale-95 hover:bg-right disabled:pointer-events-none disabled:bg-[#dcdcdc] disabled:text-[#7e7e7e] disabled:opacity-65 disabled:shadow-none "
+              className="flex h-10 w-[37%] cursor-pointer items-center justify-center gap-2 rounded-[40px] border-none bg-linear-to-r from-[#bf953f] via-[#fcf6ba] via-[#b38728] via-[#fbf5b7] to-[#aa771c]bg-size-[200%_200%] font-sans text-[14px] font-semibold text-[rgb(65,54,0)] shadow-[5px_5px_10px_rgba(0,0,0,0.144)] transition-all duration-3000 hover:scale-95 hover:bg-right disabled:pointer-events-none disabled:bg-[#dcdcdc] disabled:text-[#7e7e7e] disabled:opacity-65 disabled:shadow-none "
             >
               <Icon name="crown" />
               Explore the collection
@@ -46,7 +73,7 @@ export default async function Home() {
 
             <div className="mt-16 flex items-center gap-4 text-[0.65rem] font-medium uppercase tracking-[2px] text-[#a4b3ae]">
               <span>The Aurade Edit / 01</span>
-              <span className="h-[1px] w-12 bg-[#a4b3ae]/40" />
+              <span className="h-px w-12 bg-[#a4b3ae]/40" />
               <span>Every moment, considered.</span>
             </div>
           </div>
@@ -107,28 +134,39 @@ export default async function Home() {
         </div>
       </section>
 
-      <section className="story-banner">
-        <div className="story-photo">
-          <WatchImage
-            src={photos.wrist}
-            alt="A minimalist watch worn on a wrist"
-          />
-        </div>
-        <div className="story-copy">
-          <p className="eyebrow">THE IDEA BEHIND AURADE</p>
-          <h2>
-            Not just a watch.
-            <br />A personal presence.
-          </h2>
-          <p>
-            Aura is the feeling you carry. Trade is the discovery that brings
-            something new into your world. Aurade lives where the two meet.
-          </p>
-          <Link href="/about" className="text-link light">
-            Our story <Icon name="arrow" />
-          </Link>
-        </div>
-      </section>
+      {swapItems.length > 0 && (
+        <section className="bg-[#0a1412] px-6 py-16">
+          <div className="mx-auto grid max-w-7xl grid-cols-1 gap-8 md:grid-cols-2">
+            {/* CARD SWAP 1 - Uses Pre-shuffled Array */}
+            <div className="flex min-h-[420px] w-full items-center justify-center overflow-hidden">
+              <CardSwap
+                items={shuffledSwapItems1}
+                height={320}
+                delay={4000}
+                visibleCards={4}
+                autoplay={swapItems.length > 1}
+                pauseOnHover
+                draggable={swapItems.length > 1}
+                className="w-full max-w-[420px]"
+              />
+            </div>
+
+            {/* CARD SWAP 2 - Uses Pre-shuffled Array */}
+            <div className="flex min-h-[420px] w-full items-center justify-center overflow-hidden">
+              <CardSwap
+                items={shuffledSwapItems2}
+                height={320}
+                delay={4000}
+                visibleCards={4}
+                autoplay={swapItems.length > 1}
+                pauseOnHover
+                draggable={swapItems.length > 1}
+                className="w-full max-w-[420px]"
+              />
+            </div>
+          </div>
+        </section>
+      )}
 
       <section className="mx-auto max-w-7xl px-6 py-16 sm:py-20 lg:px-8">
         {/* Centered Heading */}
@@ -212,6 +250,7 @@ export default async function Home() {
           </span>
         </Link>
       </section>
+      <Newsletter />
     </>
   );
 }
