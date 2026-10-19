@@ -38,14 +38,10 @@ export default async function Home() {
 
             <Link
               href="/shop"
-              className="group inline-flex items-center justify-center gap-2 bg-[#e1c27f] px-8 py-4 text-[0.8rem] font-semibold uppercase tracking-[1.5px] text-[#0a1412] transition-all duration-300 hover:bg-[#d4af37]"
+              className="flex h-[40px] w-[37%] cursor-pointer items-center justify-center gap-[8px] rounded-[40px] border-none bg-gradient-to-r from-[#bf953f] via-[#fcf6ba] via-[#b38728] via-[#fbf5b7] to-[#aa771c] bg-[length:200%_200%] font-sans text-[14px] font-semibold text-[rgb(65,54,0)] shadow-[5px_5px_10px_rgba(0,0,0,0.144)] transition-all duration-[3000ms] hover:scale-95 hover:bg-right disabled:pointer-events-none disabled:bg-[#dcdcdc] disabled:text-[#7e7e7e] disabled:opacity-65 disabled:shadow-none "
             >
+              <Icon name="crown" />
               Explore the collection
-              <Icon
-                name="arrow"
-                size={18}
-                className="transition-transform duration-300 group-hover:translate-x-1"
-              />
             </Link>
 
             <div className="mt-16 flex items-center gap-4 text-[0.65rem] font-medium uppercase tracking-[2px] text-[#a4b3ae]">
@@ -97,7 +93,7 @@ export default async function Home() {
         </div>
       </section>
 
-      <section className="section container featured mx-auto max-w-7xl px-8 ">
+      <section className="section container featured mx-auto max-w-7xl px-8 bg-[#f0f5f2] ">
         <SectionHeading
           eyebrow="THE CONSIDERED COLLECTION"
           title="Meet your next signature."
@@ -187,7 +183,7 @@ export default async function Home() {
         </div>
       </section>
 
-      <section className="editorial-section container mx-auto max-w-7xl px-8 ">
+      <section className="editorial-section container mx-auto max-w-7xl px-8 bg-[#f0f5f2]">
         <div>
           <p className="eyebrow">FROM THE JOURNAL</p>
           <h2>

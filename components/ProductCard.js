@@ -29,23 +29,24 @@ export default function ProductCard({ product }) {
   }, [videoHover, hasVideo, isGif]);
 
   return (
-    <article className="group relative flex flex-col overflow-hidden rounded-sm border border-[#d8e3dd] bg-white transition-all duration-300 hover:-translate-y-0.5 hover:border-[#123c35]/30 hover:shadow-[0_12px_32px_-16px_rgba(18,60,53,0.25)]">
+    <article className="group relative flex flex-col overflow-hidden rounded-3xl bg-white shadow-sm border border-gray-100 transition-all duration-300 hover:shadow-lg">
+      {/* Top Image Container */}
       <div
-        className="relative overflow-hidden bg-[#f0f5f2]"
+        className="relative overflow-hidden bg-[#f5f5f7]"
         onMouseEnter={() => setVideoHover(true)}
         onMouseLeave={() => setVideoHover(false)}
       >
         <Link href={href} aria-label={`View ${product.name}`} className="block">
-          <div className="aspect-[4/5] w-full overflow-hidden">
-            <div className="h-full w-full transition-transform duration-700 ease-out group-hover:scale-[1.04]">
-              <WatchImage
-                src={product.image}
-                alt={`${product.name} illustrative watch photograph`}
-              />
-            </div>
+          <div className="aspect-square w-full overflow-hidden flex items-center justify-center">
+            <WatchImage
+              src={product.image}
+              alt={`${product.name} illustrative photograph`}
+              className="h-full w-full object-cover object-center"
+            />
           </div>
         </Link>
 
+        {/* Hover Video / GIF overlay */}
         {hasVideo && (
           <div
             aria-hidden="true"
@@ -73,18 +74,21 @@ export default function ProductCard({ product }) {
           </div>
         )}
 
+        {/* Optional Badge */}
         {product.badge && (
-          <span className="pointer-events-none absolute left-3 top-3 z-20 rounded-full bg-white/90 px-2.5 py-1 text-[0.6rem] font-medium uppercase tracking-[2px] text-[#123c35] backdrop-blur-sm">
+          <span className="pointer-events-none absolute left-4 top-4 z-20 rounded-full bg-black/70 px-3 py-1 text-xs font-medium text-white backdrop-blur-sm">
             {product.badge}
           </span>
         )}
 
+        {/* Video Icon Indicator */}
         {hasVideo && (
-          <span className="pointer-events-none absolute bottom-3 right-3 z-20 flex h-7 w-7 items-center justify-center rounded-full bg-[#123c35]/80 text-[#f4f0e6] backdrop-blur-sm">
+          <span className="pointer-events-none absolute bottom-4 right-4 z-20 flex h-8 w-8 items-center justify-center rounded-full bg-black/60 text-white backdrop-blur-sm">
             <Icon name="play" size={12} />
           </span>
         )}
 
+        {/* Wishlist Button */}
         <button
           type="button"
           disabled={!ready}
@@ -96,48 +100,57 @@ export default function ProductCard({ product }) {
             dispatch({ type: "WISHLIST", id: product.id });
             notify(saved ? "Removed from wishlist" : "Saved to your wishlist");
           }}
-          className={`absolute right-3 top-3 z-20 inline-flex h-9 w-9 items-center justify-center rounded-full border backdrop-blur-sm transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-50 ${
+          className={`absolute right-4 top-4 z-20 inline-flex h-9 w-9 items-center justify-center rounded-full backdrop-blur-md transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-50 ${
             saved
-              ? "border-[#123c35] bg-[#123c35] text-[#e1c27f]"
-              : "border-[#d8e3dd] bg-white/90 text-[#123c35] hover:border-[#123c35] hover:bg-white"
+              ? "bg-black text-red-500"
+              : "bg-white/80 text-gray-700 hover:bg-white hover:text-black"
           }`}
         >
           <Icon name="heart" fill={saved ? "currentColor" : "none"} size={16} />
         </button>
       </div>
 
-      <div className="flex flex-1 flex-col p-4 sm:p-5">
-        <p className="text-[0.62rem] font-medium uppercase tracking-[2.5px] text-[#5e7a70]">
-          Aurade / {product.reference}
+      {/* Content Section */}
+      <div className="flex flex-1 flex-col p-5">
+        <h3 className="text-2xl font-bold text-gray-900 tracking-tight">
+          <Link href={href} className="hover:underline">
+            {product.name} {product.reference && <span className="text-gray-500 text-[12px]">({product.reference})</span>}
+          </Link>
+        </h3>
+
+        <p className="mt-2 text-sm text-gray-600 leading-snug line-clamp-2">
+          {product.description ||
+            `${product.movement ? product.movement + " · " : ""}${product.caseSize || ""}`}
         </p>
 
-        <div className="mt-2 flex items-start justify-between gap-3">
-          <h3 className="text-[1.05rem] font-semibold leading-snug tracking-[-0.2px] text-[#123c35]">
-            <Link
-              href={href}
-              className="transition-colors hover:text-[#0d2e28]"
-            >
-              {product.name}
-            </Link>
-          </h3>
-          <span className="shrink-0 text-[0.95rem] font-semibold tracking-[-0.2px] text-[#123c35]">
-            {formatMoney(product.price)}
-          </span>
+        {/* Select Dropdowns (Style Match from Image) */}
+        <div className="mt-[-10px] grid grid-cols-2 gap-2.5">
+          <div className="relative flex items-center justify-center rounded-xl border border-gray-200 bg-white px-3 py-2 text-xs font-medium text-gray-800 shadow-sm">
+            <span className="flex items-center gap-2 truncate  ">
+              <span className="h-3.5 w-3.5 rounded-full bg-[#b2c3b2] shrink-0" />
+              {product.movement}
+            </span>
+          </div>
+
+          <div className="relative flex items-center justify-between rounded-xl border border-gray-200 bg-white px-3 py-2 text-xs font-medium text-gray-800 shadow-sm">
+            <span className="truncate text-[10px]">Case size</span> {product.caseSize}
+          </div>
         </div>
 
-        <p className="mt-1.5 text-[0.8rem] text-[#4d6b62]">
-          {product.movement} · {product.caseSize}
-        </p>
-
-        <Link
-          href={href}
-          className="mt-4 inline-flex items-center gap-1.5 self-start text-[0.78rem] font-medium uppercase tracking-[1.5px] text-[#123c35] transition-colors hover:text-[#0d2e28]"
-        >
-          <span className="border-b border-transparent pb-0.5 transition-colors group-hover:border-[#123c35]">
-            Discover the watch
+        {/* Footer / Price & Add to Cart */}
+        <div className="mt-6 flex items-center justify-between gap-3 pt-4 border-t border-gray-100">
+          <span className="text-2xl font-semibold text-gray-900 tracking-tight">
+            {formatMoney(product.price)}
           </span>
-          <Icon name="arrow" size={14} />
-        </Link>
+
+          <Link
+            href={href}
+            className="inline-flex items-center justify-center gap-1.5 rounded-2xl bg-[#163d24] px-5 py-3 text-xs font-semibold text-[#ffe2a7] shadow-sm transition-transform duration-200 hover:scale-[1.02] active:scale-[0.98] "
+          >
+            <span>Discover</span>
+            <Icon name="shopping-bag" size={14} />
+          </Link>
+        </div>
       </div>
     </article>
   );

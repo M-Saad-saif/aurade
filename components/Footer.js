@@ -57,7 +57,7 @@ export default function Footer() {
 
               <div className="flex flex-col justify-center">
                 <span className="text-[1.15rem] font-semibold leading-none tracking-[0.2em] text-[#123c35]">
-                  URADE
+                  U.R.A.D.E
                 </span>
 
                 <span className="mt-1.5 text-[0.55rem] font-medium uppercase leading-none tracking-[0.18em] text-[#5e7a70]">
