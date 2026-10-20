@@ -38,7 +38,7 @@ export default function OrderReceipt({ id }) {
       </div>
     );
   return (
-    <div className="container receipt section">
+    <div className="site-container receipt section">
       <div className="receipt-icon">
         <Icon name="check" size={32} />
       </div>

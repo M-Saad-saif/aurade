@@ -33,11 +33,11 @@ export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="mt-15 border-t border-[#d8e3dd] bg-[#f0f5f2]">
-      <div className="mx-auto w-full max-w-7xl px-6  lg:px-8 lg:py-10">
+    <footer className="mt-16 border-t border-[#d8e3dd] bg-[#f0f5f2]">
+      <div className="mx-auto w-full max-w-7xl px-6 py-12 lg:px-8 lg:py-14">
         
         {/* --- TOP SECTION (Grid) --- */}
-        <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-8">
+        <div className="grid grid-cols-1 gap-10 sm:gap-12 lg:grid-cols-12 lg:gap-8">
           
           {/* Brand Column (Takes up 4/12 columns on desktop) */}
           <div className="lg:col-span-4 lg:pr-8">
@@ -70,18 +70,18 @@ export default function Footer() {
           </div>
 
           {/* Links Columns (Takes up 8/12 columns on desktop) */}
-          <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:col-span-8">
+          <div className="grid grid-cols-2 gap-x-4 gap-y-10 sm:grid-cols-3 sm:gap-2 lg:col-span-8">
             {groups.map((group) => (
               <div key={group.title}>
-                <h3 className="mb-5 text-[0.75rem] font-semibold uppercase tracking-[2px] text-[#123c35]">
+                <h3 className="mb-4 text-[0.72rem] font-semibold uppercase tracking-[2px] text-[#123c35] sm:mb-5 sm:text-[0.75rem]">
                   {group.title}
                 </h3>
-                <ul className="flex flex-col">
+                <ul className="flex flex-col gap-2 sm:gap-0">
                   {group.links.map(([label, href]) => (
                     <li key={href}>
                       <Link
                         href={href}
-                        className="group inline-flex text-[0.88rem] text-[#5e7a70] transition-colors hover:text-[#123c35]"
+                        className="group inline-flex py-0.5 text-[0.85rem] text-[#5e7a70] transition-colors hover:text-[#123c35] sm:text-[0.88rem]"
                       >
                         <span className="border-b border-transparent pb-0.5 transition-colors group-hover:border-[#123c35]">
                           {label}
@@ -97,7 +97,7 @@ export default function Footer() {
         </div>
 
         {/* --- BOTTOM SECTION (Copyright & Legal) --- */}
-        <div className="mt-6 mb-[-80px] flex flex-col items-center justify-between gap-4 border-t border-[#d8e3dd] pt-8 sm:flex-row">
+        <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-[#d8e3dd] pt-8 sm:mt-10 sm:flex-row">
           <p className="text-[0.8rem] text-[#5e7a70]">
             © {currentYear} Aurade. Demo storefront.
           </p>

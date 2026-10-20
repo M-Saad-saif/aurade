@@ -28,7 +28,7 @@ export default async function WatchPage({ params }) {
   return (
     <>
       <ProductDetails key={product.id} product={product} />
-      <section className="section container">
+      <section className="section site-container">
         <SectionHeading eyebrow="ANOTHER PERSPECTIVE" title="You might also like." href="/shop" />
         <div className="product-grid related-grid">
           {catalog

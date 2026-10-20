@@ -56,14 +56,14 @@ export default function CheckoutForm() {
 
   if (!ready)
     return (
-      <div className="container empty-state" role="status">
+      <div className="site-container empty-state" role="status">
         Preparing checkout…
       </div>
     );
 
   if (!cart.length && !submitting)
     return (
-      <div className="container empty-state">
+      <div className="site-container empty-state">
         <h1>Your bag is empty.</h1>
         <Link href="/shop" className="button">
           Explore watches
@@ -72,7 +72,7 @@ export default function CheckoutForm() {
     );
 
   return (
-    <div className="container section">
+    <div className="site-container section">
       <div className="page-intro compact">
         <p className="eyebrow">ONE LAST DETAIL</p>
         <h1>Demo checkout.</h1>

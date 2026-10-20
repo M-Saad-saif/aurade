@@ -23,24 +23,29 @@ export default function Header() {
   const [cartBlink, setCartBlink] = useState(false);
   const [wishlistBlink, setWishlistBlink] = useState(false);
 
+  // Close menu on route change
   useEffect(() => {
     setOpen(false);
   }, [pathname]);
 
+  // Close on Escape key
   useEffect(() => {
-    const escape = (event) => {
+    const handleKeyDown = (event) => {
       if (event.key === "Escape") setOpen(false);
     };
-    window.addEventListener("keydown", escape);
-    return () => window.removeEventListener("keydown", escape);
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
+  // Lock scroll when open
   useEffect(() => {
-    if (!open) return;
-    const original = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
+    if (open) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
     return () => {
-      document.body.style.overflow = original;
+      document.body.style.overflow = "";
     };
   }, [open]);
 
@@ -71,6 +76,7 @@ export default function Header() {
 
   return (
     <>
+      {/* Announcement Bar */}
       <div className="border-b border-[#123c35]/10 bg-[#123c35] text-[#f4f0e6]">
         <div className="mx-auto flex max-w-[1280px] items-center justify-center gap-2 px-6 py-0.5 text-center text-[0.65rem] font-medium tracking-[0.5px]">
           <span className="hidden sm:inline">
@@ -79,7 +85,7 @@ export default function Header() {
           <span className="sm:hidden">A considered collection.</span>
           <Link
             href="/shop"
-            className="group inline-flex items-center gap-1 border-b border-transparent pb-0.5 transition-colors  text-[#e1c27f]"
+            className="group inline-flex items-center gap-1 border-b border-transparent pb-0.5 text-[#e1c27f] transition-colors"
           >
             Discover Aurade
             <span
@@ -92,16 +98,18 @@ export default function Header() {
         </div>
       </div>
 
-      <header className="sticky top-0 z-40 border-b border-[#d8e3dd] bg-[#f0f5f2]/85 backdrop-blur-md">
-        <div className="mx-auto grid h-16 max-w-6xl grid-cols-[auto_1fr_auto] items-center gap-3 px-6 sm:h-[72px] lg:grid-cols-[1fr_auto_1fr]">
-          <div className="flex items-center gap-2">
+      {/* Sticky Header */}
+      <header className="sticky top-0 z-30 border-b border-[#d8e3dd] bg-[#f0f5f2]/85 backdrop-blur-md">
+        <div className="mx-auto grid h-16 max-w-6xl grid-cols-[auto_1fr_auto] items-center gap-2 px-4 sm:h-[72px] sm:gap-3 sm:px-6 lg:grid-cols-[1fr_auto_1fr]">
+          <div className="flex min-w-0 items-center gap-2">
+            {/* Toggle Button */}
             <button
               type="button"
-              className="-ml-2 flex h-10 w-10 items-center justify-center rounded-full text-[#123c35] transition-colors hover:bg-[#123c35]/[0.06] lg:hidden"
+              className="-ml-1.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-[#123c35] transition-colors hover:bg-[#123c35]/[0.06] sm:-ml-2 sm:h-10 sm:w-10 lg:hidden"
               aria-label={open ? "Close navigation" : "Open navigation"}
               aria-expanded={open}
               aria-controls="main-navigation-mobile"
-              onClick={() => setOpen((v) => !v)}
+              onClick={() => setOpen((prev) => !prev)}
             >
               <Icon name={open ? "close" : "menu"} />
             </button>
@@ -109,30 +117,30 @@ export default function Header() {
             <Link
               href="/"
               aria-label="Aurade home"
-              className="group flex items-center gap-3 text-[#123c35] transition-opacity hover:opacity-80"
+              className="group flex min-w-0 items-center gap-2 text-[#123c35] transition-opacity hover:opacity-80 sm:gap-3"
             >
               <Image
                 src="/images/logo.png"
                 alt="Aurade logo"
                 width={36}
                 height={36}
-                className="h-9 w-9 shrink-0 rounded-[8px] object-contain"
+                className="h-8 w-8 shrink-0 rounded-[8px] object-contain sm:h-9 sm:w-9"
                 priority
               />
 
-              <div className="flex flex-col justify-center">
-                <span className="text-[1.15rem] font-semibold leading-none tracking-[0.2em] text-[#123c35]">
+              <div className="flex min-w-0 flex-col justify-center">
+                <span className="text-[1rem] font-semibold leading-none tracking-[0.14em] text-[#123c35] sm:text-[1.15rem] sm:tracking-[0.2em]">
                   U.R.A.D.E
                 </span>
 
-                <span className="mt-1.5 text-[0.55rem] font-medium uppercase leading-none tracking-[0.18em] text-[#5e7a70]">
+                <span className="mt-1 hidden text-[0.5rem] font-medium uppercase leading-none tracking-[0.14em] text-[#5e7a70] min-[380px]:block sm:mt-1.5 sm:text-[0.55rem] sm:tracking-[0.18em]">
                   Time, with an aura
                 </span>
               </div>
             </Link>
           </div>
 
-          {/* ---------- CENTER: desktop nav ---------- */}
+          {/* Desktop Navigation */}
           <nav
             id="main-navigation"
             aria-label="Main navigation"
@@ -163,10 +171,11 @@ export default function Header() {
             })}
           </nav>
 
-          <div className="flex items-center justify-end gap-1">
+          {/* Right Action Icons */}
+          <div className="flex items-center justify-end gap-0.5 sm:gap-1">
             <Link
               href="/shop?focus=search"
-              className="flex h-10 w-10 items-center justify-center rounded-full text-[#123c35] transition-colors hover:bg-[#123c35]/[0.06]"
+              className="flex h-9 w-9 items-center justify-center rounded-full text-[#123c35] transition-colors hover:bg-[#123c35]/[0.06] sm:h-10 sm:w-10"
               aria-label="Search watches"
             >
               <Icon name="search" />
@@ -174,7 +183,7 @@ export default function Header() {
 
             <Link
               href="/wishlist"
-              className="relative flex h-10 w-10 items-center justify-center rounded-full text-[#123c35] transition-colors hover:bg-[#123c35]/6"
+              className="relative flex h-9 w-9 items-center justify-center rounded-full text-[#123c35] transition-colors hover:bg-[#123c35]/6 sm:h-10 sm:w-10"
               aria-label={`Wishlist, ${wishlistCount} watches`}
             >
               <Icon name="heart" />
@@ -196,7 +205,7 @@ export default function Header() {
 
             <Link
               href="/cart"
-              className="relative flex h-10 w-10 items-center justify-center rounded-full text-[#123c35] transition-colors hover:bg-[#123c35]/6"
+              className="relative flex h-9 w-9 items-center justify-center rounded-full text-[#123c35] transition-colors hover:bg-[#123c35]/6 sm:h-10 sm:w-10"
               aria-label={`Shopping bag, ${count} items`}
             >
               <Icon name="bag" />
@@ -219,63 +228,73 @@ export default function Header() {
         </div>
       </header>
 
-      {/* ===== MOBILE DRAWER ===== */}
+      {/* ===== MOBILE DRAWER CONTAINER ===== */}
       <div
-        aria-hidden="true"
-        onClick={() => setOpen(false)}
-        className={`fixed inset-0 z-30 bg-[#123c35]/40 backdrop-blur-sm transition-opacity duration-300 lg:hidden ${
-          open ? "opacity-100" : "pointer-events-none opacity-0"
+        className={`fixed inset-0 z-50 lg:hidden ${
+          open
+            ? "visible pointer-events-auto"
+            : "invisible pointer-events-none delay-300"
         }`}
-      />
-
-      {/* Panel */}
-      <nav
-        id="main-navigation-mobile"
-        aria-label="Main navigation"
-        className={`fixed inset-y-0 left-0 z-40 w-[80%] max-w-sm border-r border-[#d8e3dd] bg-[#f0f5f2] px-6 pb-8 pt-6 shadow-[8px_0_32px_-12px_rgba(18,60,53,0.25)] transition-transform duration-300 ease-out lg:hidden ${
-          open ? "translate-x-0" : "-translate-x-full"
-        }`}
+        aria-hidden={!open}
       >
-        <div className="flex items-center justify-between">
-          <span className="text-[1.05rem] font-semibold tracking-[3px] text-[#123c35]">
-            AURADE
-          </span>
-          <button
-            type="button"
-            onClick={() => setOpen(false)}
-            aria-label="Close navigation"
-            className="flex h-10 w-10 items-center justify-center rounded-full text-[#123c35] transition-colors hover:bg-[#123c35]/[0.06]"
-          >
-            <Icon name="close" />
-          </button>
-        </div>
+        {/* Backdrop Overlay */}
+        <div
+          aria-hidden="true"
+          onClick={() => setOpen(false)}
+          className={`absolute inset-0 bg-[#123c35]/40 backdrop-blur-sm transition-opacity duration-300 ${
+            open ? "opacity-100" : "opacity-0"
+          }`}
+        />
 
-        <ul className="mt-10 flex flex-col divide-y divide-[#d8e3dd]">
-          {links.map(([label, href]) => {
-            const active = isActive(href);
-            return (
-              <li key={href}>
-                <Link
-                  href={href}
-                  aria-current={active ? "page" : undefined}
-                  className={`flex items-center justify-between py-4 text-[1.05rem] font-medium transition-colors ${
-                    active
-                      ? "text-[#123c35]"
-                      : "text-[#4d6b62] hover:text-[#123c35]"
-                  }`}
-                >
-                  {label}
-                  <Icon name="arrow" size={16} />
-                </Link>
-              </li>
-            );
-          })}
-        </ul>
+        {/* Sliding Panel */}
+        <nav
+          id="main-navigation-mobile"
+          aria-label="Mobile navigation"
+          className={`absolute inset-y-0 left-0 h-full w-[80%] max-w-sm border-r border-[#d8e3dd] bg-[#f0f5f2] px-6 pb-8 pt-6 shadow-[8px_0_32px_-12px_rgba(18,60,53,0.25)] transition-transform duration-300 ease-out ${
+            open ? "translate-x-0" : "-translate-x-full"
+          }`}
+        >
+          <div className="flex items-center justify-between">
+            <span className="text-[1.05rem] font-semibold tracking-[3px] text-[#123c35]">
+              AURADE
+            </span>
+            <button
+              type="button"
+              onClick={() => setOpen(false)}
+              aria-label="Close navigation"
+              className="flex h-10 w-10 items-center justify-center rounded-full text-[#123c35] transition-colors hover:bg-[#123c35]/[0.06]"
+            >
+              <Icon name="close" />
+            </button>
+          </div>
 
-        <p className="mt-10 text-[0.62rem] font-medium uppercase tracking-[3px] text-[#5e7a70]">
-          Time, with an aura
-        </p>
-      </nav>
+          <ul className="mt-10 flex flex-col divide-y divide-[#d8e3dd]">
+            {links.map(([label, href]) => {
+              const active = isActive(href);
+              return (
+                <li key={href}>
+                  <Link
+                    href={href}
+                    aria-current={active ? "page" : undefined}
+                    className={`flex items-center justify-between py-4 text-[1.05rem] font-medium transition-colors ${
+                      active
+                        ? "text-[#123c35]"
+                        : "text-[#4d6b62] hover:text-[#123c35]"
+                    }`}
+                  >
+                    {label}
+                    <Icon name="arrow" size={16} />
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+
+          <p className="mt-10 text-[0.62rem] font-medium uppercase tracking-[3px] text-[#5e7a70]">
+            Time, with an aura
+          </p>
+        </nav>
+      </div>
     </>
   );
 }

@@ -16,7 +16,7 @@ export default async function Support({ params }) {
   const page = Object.hasOwn(supportPages, slug) ? supportPages[slug] : null;
   if (!page) notFound();
   return (
-    <div className="container section support-layout">
+    <div className="site-container section support-layout">
       <aside className="support-nav">
         <p className="eyebrow">INFORMATION</p>
         {Object.entries(supportPages).map(([key, value]) => (

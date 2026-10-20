@@ -1,10 +1,10 @@
-'use client';
-import Link from 'next/link';
-import { useStore } from './StoreProvider';
-import { cartSubtotal, lineKey } from '@/lib/cart';
-import { formatMoney, shippingFor } from '@/lib/catalog';
-import WatchImage from './WatchImage';
-import Icon from './Icon';
+"use client";
+import Link from "next/link";
+import { useStore } from "./StoreProvider";
+import { cartSubtotal, lineKey } from "@/lib/cart";
+import { formatMoney, shippingFor } from "@/lib/catalog";
+import WatchImage from "./WatchImage";
+import Icon from "./Icon";
 
 export function OrderSummary({ cart, children }) {
   const { findProduct } = useStore();
@@ -18,20 +18,22 @@ export function OrderSummary({ cart, children }) {
       <h2 className="mb-6 text-[1.25rem] font-semibold tracking-[-0.3px] text-[#123c35]">
         Order Summary
       </h2>
-      
+
       <dl className="flex flex-col gap-4 text-[0.9rem]">
         <div className="flex items-center justify-between text-[#4d6b62]">
           <dt>Subtotal</dt>
-          <dd className="font-medium text-[#123c35]">{formatMoney(subtotal)}</dd>
+          <dd className="font-medium text-[#123c35]">
+            {formatMoney(subtotal)}
+          </dd>
         </div>
-        
+
         <div className="flex items-center justify-between text-[#4d6b62]">
           <dt>Demo shipping</dt>
           <dd className="font-medium text-[#123c35]">
-            {shipping ? formatMoney(shipping) : 'Complimentary'}
+            {shipping ? formatMoney(shipping) : "Complimentary"}
           </dd>
         </div>
-        
+
         <div className="flex items-center justify-between text-[#4d6b62]">
           <dt>Taxes</dt>
           <dd className="text-[0.8rem] text-[#5e7a70]/70">Not calculated</dd>
@@ -45,28 +47,25 @@ export function OrderSummary({ cart, children }) {
         </div>
       </dl>
 
-      {/* Free Shipping Progress Bar */}
       {subtotal > 0 && subtotal < freeShippingThreshold && (
         <div className="mt-6">
           <p className="mb-2 text-[0.8rem] text-[#4d6b62]">
-            You are <strong className="font-semibold text-[#123c35]">{formatMoney(freeShippingThreshold - subtotal)}</strong> away from free shipping.
+            You are{" "}
+            <strong className="font-semibold text-[#123c35]">
+              {formatMoney(freeShippingThreshold - subtotal)}
+            </strong>{" "}
+            away from free shipping.
           </p>
           <div className="h-1.5 w-full overflow-hidden rounded-full bg-[#e5ede9]">
-            <div 
-              className="h-full bg-[#123c35] transition-all duration-500 ease-out" 
+            <div
+              className="h-full bg-[#123c35] transition-all duration-500 ease-out"
               style={{ width: `${progress}%` }}
             />
           </div>
         </div>
       )}
 
-      <div className="mt-8">
-        {children}
-      </div>
-
-      <p className="mt-6 text-center text-[0.7rem] leading-relaxed text-[#5e7a70]/70">
-        PKR. Demo only. No payment or fulfillment. A real store must calculate applicable taxes server-side.
-      </p>
+      <div className="mt-8">{children}</div>
     </aside>
   );
 }
@@ -74,7 +73,6 @@ export function OrderSummary({ cart, children }) {
 export default function CartView() {
   const { cart, dispatch, ready, notify, findProduct } = useStore();
 
-  // --- LOADING STATE ---
   if (!ready)
     return (
       <section className="mx-auto flex min-h-[50vh] w-full max-w-7xl flex-col items-center justify-center px-6 py-24">
@@ -83,7 +81,6 @@ export default function CartView() {
       </section>
     );
 
-  // --- EMPTY STATE ---
   if (!cart.length)
     return (
       <section className="mx-auto w-full max-w-7xl px-6 py-16 sm:py-24 lg:px-8">
@@ -100,24 +97,26 @@ export default function CartView() {
             Your bag is waiting.
           </h1>
           <p className="mb-10 max-w-md text-[0.95rem] leading-relaxed text-[#5e7a70]">
-            Discover a watch that feels like you. Explore our curated collection of timepieces.
+            Discover a watch that feels like you. Explore our curated collection
+            of timepieces.
           </p>
-          <Link 
-            href="/shop" 
+          <Link
+            href="/shop"
             className="group inline-flex h-12 items-center justify-center gap-2 rounded-full bg-[#123c35] px-8 text-[0.85rem] font-semibold uppercase tracking-[1.5px] text-[#f4f0e6] transition-all duration-200 hover:bg-[#0d2e28] active:scale-[0.99]"
           >
             Explore watches
-            <Icon name="arrow" size={16} className="transition-transform duration-300 group-hover:translate-x-1" />
+            <Icon
+              name="arrow"
+              size={16}
+              className="transition-transform duration-300 group-hover:translate-x-1"
+            />
           </Link>
         </div>
       </section>
     );
 
-  // --- MAIN CART VIEW ---
   return (
     <section className="mx-auto w-full max-w-7xl px-6 py-12 lg:px-8 lg:py-16">
-      
-      {/* HEADER */}
       <div className="mb-10 flex flex-col justify-between gap-6 border-b border-[#d8e3dd] pb-6 sm:flex-row sm:items-end">
         <div>
           <p className="mb-2 text-[0.68rem] font-medium uppercase tracking-[4px] text-[#5e7a70]">
@@ -127,82 +126,84 @@ export default function CartView() {
             Shopping bag.
           </h1>
         </div>
-        <Link 
-          href="/shop" 
+        <Link
+          href="/shop"
           className="group inline-flex shrink-0 items-center gap-2 text-[0.8rem] font-medium uppercase tracking-[1.5px] text-[#123c35] transition-colors hover:text-[#0d2e28]"
         >
           <span className="border-b border-transparent pb-1 transition-colors group-hover:border-[#123c35]">
             Continue exploring
           </span>
-          <Icon name="arrow" size={16} className="transition-transform duration-300 group-hover:translate-x-1" />
+          <Icon
+            name="arrow"
+            size={16}
+            className="transition-transform duration-300 group-hover:translate-x-1"
+          />
         </Link>
       </div>
 
-      {/* LAYOUT GRID */}
       <div className="grid grid-cols-1 items-start gap-10 lg:grid-cols-[1fr_400px] lg:gap-16">
-        
-        {/* CART LINES */}
         <div className="flex flex-col divide-y divide-[#d8e3dd] border-t border-[#d8e3dd]">
           {cart.map((line) => {
             const product = findProduct(line.id);
             if (!product) return null;
             const key = lineKey(line.id, line.strap);
             const otherQuantity = cart
-              .filter((item) => item.id === line.id && lineKey(item.id, item.strap) !== key)
+              .filter(
+                (item) =>
+                  item.id === line.id && lineKey(item.id, item.strap) !== key,
+              )
               .reduce((sum, item) => sum + item.quantity, 0);
 
             return (
-              <article className="flex flex-col gap-6 py-6 sm:flex-row" key={key}>
-                
-                {/* Image */}
-                <Link 
-                  href={`/watches/${product.id}`} 
-                  className="relative block aspect-[4/5] w-full shrink-0 overflow-hidden rounded-sm border border-[#d8e3dd] bg-[#f0f5f2] sm:w-[120px]"
+              <article className="flex flex-row gap-4 py-6 sm:gap-6" key={key}>
+                <Link
+                  href={`/watches/${product.id}`}
+                  className="relative block aspect-[4/5] w-20 shrink-0 overflow-hidden rounded-sm border border-[#d8e3dd] bg-[#f0f5f2] min-[380px]:w-24 sm:w-[120px]"
                 >
-                  <WatchImage 
-                    src={product.image} 
-                    alt={product.name} 
+                  <WatchImage
+                    src={product.image}
+                    alt={product.name}
                     className="h-full w-full object-cover transition-transform duration-500 hover:scale-105"
                   />
                 </Link>
 
-                {/* Info Container */}
                 <div className="flex flex-1 flex-col justify-between">
-                  <div className="flex items-start justify-between gap-4">
-                    
-                    {/* Product Details */}
-                    <div>
-                      <p className="mb-1 text-[0.6rem] font-medium uppercase tracking-[2px] text-[#5e7a70]">
+                  <div className="flex flex-col gap-2 min-[480px]:flex-row min-[480px]:items-start min-[480px]:justify-between min-[480px]:gap-4">
+                    <div className="min-w-0">
+                      <p className="mb-1 text-[0.58rem] font-medium uppercase tracking-[2px] text-[#5e7a70] sm:text-[0.6rem]">
                         Aurade / {product.reference}
                       </p>
-                      <h2 className="text-[1.1rem] font-semibold leading-snug tracking-[-0.2px] text-[#123c35]">
-                        <Link href={`/watches/${product.id}`} className="hover:underline">
+                      <h2 className="text-[0.95rem] font-semibold leading-snug tracking-[-0.2px] text-[#123c35] sm:text-[1.1rem]">
+                        <Link
+                          href={`/watches/${product.id}`}
+                          className="hover:underline"
+                        >
                           {product.name}
                         </Link>
                       </h2>
-                      <p className="mt-1 text-[0.85rem] text-[#4d6b62]">{line.strap}</p>
+                      <p className="mt-1 text-[0.78rem] text-[#4d6b62] sm:text-[0.85rem]">
+                        {line.strap}
+                      </p>
                     </div>
-                    
-                    {/* Price */}
-                    <div className="text-right">
-                      <strong className="block text-[1.05rem] font-semibold text-[#123c35]">
+
+                    <div className="text-left min-[480px]:text-right">
+                      <strong className="block text-[0.95rem] font-semibold text-[#123c35] sm:text-[1.05rem]">
                         {formatMoney(product.price * line.quantity)}
                       </strong>
-                      <p className="mt-0.5 text-[0.8rem] text-[#5e7a70]">
+                      <p className="mt-0.5 text-[0.72rem] text-[#5e7a70] sm:text-[0.8rem]">
                         {formatMoney(product.price)} each
                       </p>
                     </div>
                   </div>
 
-                  {/* Bottom Row: Quantity & Remove */}
-                  <div className="mt-6 flex items-center justify-between">
+                  <div className="mt-4 flex flex-wrap items-center justify-between gap-3 sm:mt-6">
                     <div className="flex h-9 items-center rounded-full border border-[#c8d6d0] bg-white">
                       <button
                         aria-label={`Decrease ${product.name} quantity`}
                         disabled={line.quantity <= 1}
                         onClick={() =>
                           dispatch({
-                            type: 'QUANTITY',
+                            type: "QUANTITY",
                             key,
                             quantity: line.quantity - 1,
                           })
@@ -216,10 +217,12 @@ export default function CartView() {
                       </span>
                       <button
                         aria-label={`Increase ${product.name} quantity`}
-                        disabled={line.quantity + otherQuantity >= product.stock}
+                        disabled={
+                          line.quantity + otherQuantity >= product.stock
+                        }
                         onClick={() =>
                           dispatch({
-                            type: 'QUANTITY',
+                            type: "QUANTITY",
                             key,
                             quantity: line.quantity + 1,
                           })
@@ -233,32 +236,37 @@ export default function CartView() {
                     <button
                       className="group flex items-center gap-1.5 text-[0.75rem] font-medium text-[#5e7a70] transition-colors hover:text-[#b85450]"
                       onClick={() => {
-                        dispatch({ type: 'REMOVE', key });
-                        notify('Removed from your bag');
+                        dispatch({ type: "REMOVE", key });
+                        notify("Removed from your bag");
                       }}
                     >
-                      <Icon name="trash" size={14} className="transition-transform group-hover:-translate-y-0.5" />
+                      <Icon
+                        name="trash"
+                        size={14}
+                        className="transition-transform group-hover:-translate-y-0.5"
+                      />
                       Remove
                     </button>
                   </div>
                 </div>
-
               </article>
             );
           })}
         </div>
 
-        {/* ORDER SUMMARY */}
         <OrderSummary cart={cart}>
-          <Link 
-            href="/checkout" 
+          <Link
+            href="/checkout"
             className="group flex h-12 w-full items-center justify-center gap-2 rounded-full bg-[#123c35] px-6 text-[0.85rem] font-semibold uppercase tracking-[1.5px] text-[#f4f0e6] transition-all duration-200 hover:bg-[#0d2e28] active:scale-[0.99]"
           >
             Continue to checkout
-            <Icon name="arrow" size={16} className="transition-transform duration-300 group-hover:translate-x-1" />
+            <Icon
+              name="arrow"
+              size={16}
+              className="transition-transform duration-300 group-hover:translate-x-1"
+            />
           </Link>
         </OrderSummary>
-
       </div>
     </section>
   );

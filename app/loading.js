@@ -1,6 +1,6 @@
 export default function Loading() {
   return (
-    <div className="container section" role="status" aria-label="Loading page">
+    <div className="site-container section" role="status" aria-label="Loading page">
       <div className="skeleton skeleton-title" />
       <div className="product-grid">
         {[1, 2, 3, 4].map((item) => (
