@@ -153,7 +153,7 @@ export default function CartView() {
               <article className="flex flex-row gap-4 py-6 sm:gap-6" key={key}>
                 <Link
                   href={`/watches/${product.id}`}
-                  className="relative block aspect-[4/5] w-20 shrink-0 overflow-hidden rounded-sm border border-[#d8e3dd] bg-[#f0f5f2] min-[380px]:w-24 sm:w-[120px]"
+                  className="relative block aspect-4/5 w-20 shrink-0 overflow-hidden rounded-sm border border-[#d8e3dd] bg-[#f0f5f2] min-[380px]:w-24 sm:w-30"
                 >
                   <WatchImage
                     src={product.image}

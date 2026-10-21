@@ -43,7 +43,7 @@ export default function Footer() {
                 alt="Aurade logo"
                 width={36}
                 height={36}
-                className="h-10 w-10 shrink-0 rounded-[8px] object-contain"
+                className="h-10 w-10 shrink-0 rounded-lg object-contain"
                 priority
               />
               <div className="flex flex-col justify-center">
@@ -89,7 +89,7 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="mt-12 mb-[-30px] flex flex-col items-center justify-between gap-4 border-t border-[#d8e3dd] pt-8 sm:mt-10 sm:flex-row">
+        <div className="mt-12 -mb-7.5 flex flex-col items-center justify-between gap-4 border-t border-[#d8e3dd] pt-8 sm:mt-10 sm:flex-row">
           <p className="text-[0.8rem] text-[#5e7a70]">
             © {currentYear} Aurade.
           </p>

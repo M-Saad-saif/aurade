@@ -103,7 +103,7 @@ export default function OrderReceipt({ id }) {
                     <p className="text-[0.95rem] font-semibold text-[#123c35]">
                       {line.name}
                     </p>
-                    <p className="mt-[-18px] text-[0.8rem] text-[#5e7a70]">
+                    <p className="-mt-4.5 text-[0.8rem] text-[#5e7a70]">
                       {line.strap} · Qty {line.quantity}
                     </p>
                   </div>

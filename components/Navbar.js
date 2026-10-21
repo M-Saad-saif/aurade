@@ -75,7 +75,7 @@ export default function Header() {
     <>
       {/* Announcement Bar */}
       <div className="border-b border-[#123c35]/10 bg-[#123c35] text-[#f4f0e6]">
-        <div className="mx-auto flex max-w-[1280px] items-center justify-center gap-2 px-6 py-0.5 text-center text-[0.65rem] font-medium tracking-[0.5px]">
+        <div className="mx-auto flex max-w-7xl items-center justify-center gap-2 px-6 py-0.5 text-center text-[0.65rem] font-medium tracking-[0.5px]">
           <span className="hidden sm:inline">
             A considered collection. A distinctive presence.
           </span>
@@ -97,12 +97,12 @@ export default function Header() {
 
       {/* Sticky Header */}
       <header className="sticky top-0 z-30 border-b border-[#d8e3dd] bg-[#f0f5f2]/85 backdrop-blur-md">
-        <div className="mx-auto grid h-16 max-w-6xl grid-cols-[auto_1fr_auto] items-center gap-2 px-4 sm:h-[72px] sm:gap-3 sm:px-6 lg:grid-cols-[1fr_auto_1fr]">
+        <div className="mx-auto grid h-16 max-w-6xl grid-cols-[auto_1fr_auto] items-center gap-2 px-4 sm:h-18 sm:gap-3 sm:px-6 lg:grid-cols-[1fr_auto_1fr]">
           <div className="flex min-w-0 items-center gap-2">
             {/* Toggle Button */}
             <button
               type="button"
-              className="-ml-1.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-[#123c35] transition-colors hover:bg-[#123c35]/[0.06] sm:-ml-2 sm:h-10 sm:w-10 lg:hidden"
+              className="-ml-1.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-[#123c35] transition-colors hover:bg-[#123c35]/6 sm:-ml-2 sm:h-10 sm:w-10 lg:hidden"
               aria-label={open ? "Close navigation" : "Open navigation"}
               aria-expanded={open}
               aria-controls="main-navigation-mobile"
@@ -121,7 +121,7 @@ export default function Header() {
                 alt="Aurade logo"
                 width={36}
                 height={36}
-                className="h-8 w-8 shrink-0 rounded-[8px] object-contain sm:h-9 sm:w-9"
+                className="h-8 w-8 shrink-0 rounded-lg object-contain sm:h-9 sm:w-9"
                 priority
               />
 
@@ -159,7 +159,7 @@ export default function Header() {
                   {label}
                   <span
                     aria-hidden="true"
-                    className={`pointer-events-none absolute inset-x-3.5 -bottom-[1px] h-[2px] rounded-full bg-[#123c35] transition-all duration-300 ${
+                    className={`pointer-events-none absolute inset-x-3.5 -bottom-px h-0.5 rounded-full bg-[#123c35] transition-all duration-300 ${
                       active ? "scale-x-100 opacity-100" : "scale-x-0 opacity-0"
                     }`}
                   />
@@ -172,7 +172,7 @@ export default function Header() {
           <div className="flex items-center justify-end gap-0.5 sm:gap-1">
             <Link
               href="/shop?focus=search"
-              className="flex h-9 w-9 items-center justify-center rounded-full text-[#123c35] transition-colors hover:bg-[#123c35]/[0.06] sm:h-10 sm:w-10"
+              className="flex h-9 w-9 items-center justify-center rounded-full text-[#123c35] transition-colors hover:bg-[#123c35]/6 sm:h-10 sm:w-10"
               aria-label="Search watches"
             >
               <Icon name="search" />
@@ -187,10 +187,10 @@ export default function Header() {
               {wishlistCount > 0 && (
                 <>
                   {wishlistBlink && (
-                    <span className="absolute -right-0.5 -top-0.5 h-[18px] min-w-[18px] animate-ping rounded-full bg-[#e1c27f] opacity-75" />
+                    <span className="absolute -right-0.5 -top-0.5 h-4.5 min-w-4.5 animate-ping rounded-full bg-[#e1c27f] opacity-75" />
                   )}
                   <span
-                    className={`absolute -right-0.5 -top-0.5 flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-[#123c35] px-1 text-[0.6rem] font-semibold text-[#e1c27f] ring-2 ring-[#f0f5f2] transition-transform duration-300 ${
+                    className={`absolute -right-0.5 -top-0.5 flex h-4.5 min-w-4.5 items-center justify-center rounded-full bg-[#123c35] px-1 text-[0.6rem] font-semibold text-[#e1c27f] ring-2 ring-[#f0f5f2] transition-transform duration-300 ${
                       wishlistBlink ? "scale-125" : "scale-100"
                     }`}
                   >
@@ -209,10 +209,10 @@ export default function Header() {
               {count > 0 && (
                 <>
                   {cartBlink && (
-                    <span className="absolute -right-0.5 -top-0.5 h-[18px] min-w-[18px] animate-ping rounded-full bg-[#e1c27f] opacity-75" />
+                    <span className="absolute -right-0.5 -top-0.5 h-4.5 min-w-4.5 animate-ping rounded-full bg-[#e1c27f] opacity-75" />
                   )}
                   <span
-                    className={`absolute -right-0.5 -top-0.5 flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-[#123c35] px-1 text-[0.6rem] font-semibold text-[#e1c27f] ring-2 ring-[#f0f5f2] transition-transform duration-300 ${
+                    className={`absolute -right-0.5 -top-0.5 flex h-4.5 min-w-4.5 items-center justify-center rounded-full bg-[#123c35] px-1 text-[0.6rem] font-semibold text-[#e1c27f] ring-2 ring-[#f0f5f2] transition-transform duration-300 ${
                       cartBlink ? "scale-125" : "scale-100"
                     }`}
                   >
@@ -234,7 +234,6 @@ export default function Header() {
         }`}
         aria-hidden={!open}
       >
-        {/* Backdrop Overlay */}
         <div
           aria-hidden="true"
           onClick={() => setOpen(false)}
@@ -243,7 +242,6 @@ export default function Header() {
           }`}
         />
 
-        {/* Sliding Panel */}
         <nav
           id="main-navigation-mobile"
           aria-label="Mobile navigation"
@@ -259,7 +257,7 @@ export default function Header() {
               type="button"
               onClick={() => setOpen(false)}
               aria-label="Close navigation"
-              className="flex h-10 w-10 items-center justify-center rounded-full text-[#123c35] transition-colors hover:bg-[#123c35]/[0.06]"
+              className="flex h-10 w-10 items-center justify-center rounded-full text-[#123c35] transition-colors hover:bg-[#123c35]/6"
             >
               <Icon name="close" />
             </button>
