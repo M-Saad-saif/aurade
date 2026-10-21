@@ -1,6 +1,6 @@
 import OrderReceipt from '@/components/OrderReceipt';
 export const metadata = {
-  title: 'Demo receipt',
+  title: 'Order confirmation',
   robots: { index: false, follow: false },
 };
 export default async function SuccessPage({ searchParams }) {

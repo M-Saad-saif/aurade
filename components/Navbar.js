@@ -23,12 +23,10 @@ export default function Header() {
   const [cartBlink, setCartBlink] = useState(false);
   const [wishlistBlink, setWishlistBlink] = useState(false);
 
-  // Close menu on route change
   useEffect(() => {
     setOpen(false);
   }, [pathname]);
 
-  // Close on Escape key
   useEffect(() => {
     const handleKeyDown = (event) => {
       if (event.key === "Escape") setOpen(false);
@@ -37,7 +35,6 @@ export default function Header() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
-  // Lock scroll when open
   useEffect(() => {
     if (open) {
       document.body.style.overflow = "hidden";

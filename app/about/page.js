@@ -104,7 +104,7 @@ export default function About() {
 
           <div className="flex items-center gap-3">
             <a
-              href="https://instagram.com/aurade"
+              href="https://instagram.com/a.u.r.a.d.e"
               target="_blank"
               rel="noreferrer"
               aria-label="Aurade's Instagram"
@@ -113,7 +113,7 @@ export default function About() {
               <Icon name="instagram" size={16} />
             </a>
             <a
-              href="https://tiktok.com/@aurade"
+              href="https://tiktok.com/@a.u.r.a.d.e"
               target="_blank"
               rel="noreferrer"
               aria-label="Aurade's TikTok"

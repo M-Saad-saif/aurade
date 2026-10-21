@@ -1,7 +1,7 @@
 import CheckoutForm from "@/components/CheckoutForm";
 
 export const metadata = {
-  title: "Demo checkout",
+  title: "Checkout",
   robots: { index: false, follow: false },
 };
 

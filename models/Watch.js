@@ -37,7 +37,6 @@ const WatchSchema = new mongoose.Schema(
     images: { type: [WatchImageSchema], default: [] },
     imageUrl: { type: String, required: true },
     imagePublicId: { type: String, required: true },
-    // Optional short clip (mp4/webm) or animated gif shown on hover on the storefront.
     videoUrl: { type: String, trim: true },
     videoPublicId: { type: String, trim: true },
     videoType: { type: String, enum: ["video", "gif"] },

@@ -2,16 +2,13 @@
 import Link from "next/link";
 import { useStore } from "./StoreProvider";
 import { cartSubtotal, lineKey } from "@/lib/cart";
-import { formatMoney, shippingFor } from "@/lib/catalog";
+import { formatMoney } from "@/lib/catalog";
 import WatchImage from "./WatchImage";
 import Icon from "./Icon";
 
-export function OrderSummary({ cart, children }) {
+export function OrderSummary({ cart, children, showItems = false }) {
   const { findProduct } = useStore();
   const subtotal = cartSubtotal(cart, findProduct);
-  const shipping = shippingFor(subtotal);
-  const freeShippingThreshold = 8340000;
-  const progress = Math.min(100, (subtotal / freeShippingThreshold) * 100);
 
   return (
     <aside className="rounded-sm border border-[#d8e3dd] bg-white p-6 shadow-[0_12px_40px_-16px_rgba(18,60,53,0.1)] sm:p-8 lg:sticky lg:top-24">
@@ -27,41 +24,39 @@ export function OrderSummary({ cart, children }) {
           </dd>
         </div>
 
-        <div className="flex items-center justify-between text-[#4d6b62]">
-          <dt>Demo shipping</dt>
-          <dd className="font-medium text-[#123c35]">
-            {shipping ? formatMoney(shipping) : "Complimentary"}
-          </dd>
-        </div>
-
-        <div className="flex items-center justify-between text-[#4d6b62]">
-          <dt>Taxes</dt>
-          <dd className="text-[0.8rem] text-[#5e7a70]/70">Not calculated</dd>
-        </div>
-
         <div className="mt-2 flex items-center justify-between border-t border-[#d8e3dd] pt-4">
           <dt className="text-[1rem] font-semibold text-[#123c35]">Total</dt>
           <dd className="text-[1.2rem] font-semibold text-[#123c35]">
-            {formatMoney(subtotal + shipping)}
+            {formatMoney(subtotal)}
           </dd>
         </div>
       </dl>
 
-      {subtotal > 0 && subtotal < freeShippingThreshold && (
-        <div className="mt-6">
-          <p className="mb-2 text-[0.8rem] text-[#4d6b62]">
-            You are{" "}
-            <strong className="font-semibold text-[#123c35]">
-              {formatMoney(freeShippingThreshold - subtotal)}
-            </strong>{" "}
-            away from free shipping.
-          </p>
-          <div className="h-1.5 w-full overflow-hidden rounded-full bg-[#e5ede9]">
-            <div
-              className="h-full bg-[#123c35] transition-all duration-500 ease-out"
-              style={{ width: `${progress}%` }}
-            />
-          </div>
+      {showItems && (
+        <div className="mt-6 border-t border-[#d8e3dd] pt-5">
+          <h3 className="mb-3 text-[0.75rem] font-semibold uppercase tracking-[1px] text-[#123c35]">
+            Watches
+          </h3>
+          <ul className="flex flex-col gap-3">
+            {cart.map((line) => {
+              const product = findProduct(line.id);
+              if (!product) return null;
+              return (
+                <li
+                  key={lineKey(line.id, line.strap)}
+                  className="flex justify-between gap-4 text-[0.85rem] text-[#4d6b62]"
+                >
+                  <span>
+                    <span className="block font-medium text-[#123c35]">{product.name}</span>
+                    <span className="text-[0.78rem]">{line.strap} · Qty {line.quantity}</span>
+                  </span>
+                  <span className="shrink-0 font-medium text-[#123c35]">
+                    {formatMoney(product.price * line.quantity)}
+                  </span>
+                </li>
+              );
+            })}
+          </ul>
         </div>
       )}
 

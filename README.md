@@ -31,7 +31,7 @@ If package-lock.json is included, use `npm ci` for repeatable installs. Copy `.e
 - Four collection pages and a collection index.
 - Strap choices, quantity controls and catalog-based stock caps.
 - Persistent localStorage bag and wishlist; validation, hydration guard, storage-failure notice and cross-tab synchronization.
-- Cart line editing, removal, demo shipping threshold and order summary.
+- Cart line editing, removal and order summary.
 - Validated demo checkout and tab-local receipt. No card fields, payment, email, fulfillment or backend.
 - About, journal index, two article pages, contact and sell/trade inquiry UI.
 - Shipping, returns, care, FAQ, privacy and terms pages. These explain the demo, not legally reviewed retail policies.
@@ -71,18 +71,18 @@ The configuration starts the dev server automatically and runs desktop Chromium 
 2. Edit CSS variables at the top of `app/globals.css` for brand colors and fonts.
 3. Replace remote photos with accurate, licensed local files in `public/images`, then set catalog image paths to `/images/your-photo.jpg`. Keep a photo for every actual variant if you need image switching.
 4. Edit `lib/content.js` for editorial and information content.
-5. Change the formatter in `lib/catalog.js` to change currency. Also update hard-coded PKR labels, demo shipping text, thresholds and sample prices consistently (amounts are stored as integer paisa, i.e. 1/100 PKR). Changing a currency symbol alone does not convert prices.
+5. Change the formatter in `lib/catalog.js` to change currency. Also update hard-coded PKR labels and sample prices consistently (amounts are stored as integer paisa, i.e. 1/100 PKR). Changing a currency symbol alone does not convert prices.
 6. Connect the contact, trade and newsletter forms to a validated backend before removing demo acknowledgements.
 
 ## Important production boundary
 
 This is a complete frontend demo, not a production commerce backend. It has no authentication, database, real-time inventory, real order storage, payment integration, email delivery, admin panel or tax engine. Local state can be modified by users and must never authorize a real charge or inventory allocation.
 
-Before taking payments: implement server-authoritative pricing and inventory, authenticated order access, a secure hosted payment provider, verified payment webhooks with idempotency, shipping/tax calculation, fulfillment, transactional email, abuse controls, monitoring and legally reviewed policies. Never trust client totals or use this demo receipt as proof of payment.
+Before taking payments: implement server-authoritative pricing and inventory, authenticated order access, a secure hosted payment provider, verified payment webhooks with idempotency, fulfillment, transactional email, abuse controls, monitoring and legally reviewed policies. Never trust client totals or use this demo receipt as proof of payment.
 
 Stock is shared across strap options in the sample catalog, not independently tracked per variant. Browser tabs synchronize with last-write-wins semantics; simultaneous edits are not transaction-safe. Real inventory needs server-side reservation and concurrency control.
 
-Checkout contact/address fields are not persisted by this application. The receipt in sessionStorage stores product details, totals, a timestamp and a generated demo reference only. Newsletter/contact/trade forms do not send or save submissions. No fake customer reviews, authenticity guarantees or sustainability claims are included.
+Checkout collects a customer's name, email and phone number. Order records and receipts include those contact details and the product details, totals, timestamp and generated order reference. Newsletter/contact/trade forms do not send or save submissions. No fake customer reviews, authenticity guarantees or sustainability claims are included.
 
 ## Images and fonts
 

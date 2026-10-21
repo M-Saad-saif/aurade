@@ -295,19 +295,10 @@ export default function ProductDetails({ product }) {
                   ready && available > 0 ? "bg-[#2f7a4e]" : "bg-[#b85450]"
                 }`}
               />
-              {ready ? available : product.stock} available in demo inventory
+              {ready ? available : product.stock} available
             </p>
 
             <div className="mt-6 grid grid-cols-1 gap-3 border-y border-[#d8e3dd] py-5 sm:grid-cols-2">
-              <Link
-                href="/support/shipping"
-                className="group flex items-center gap-3 text-[0.82rem] text-[#123c35] transition-opacity hover:opacity-80"
-              >
-                <Icon name="truck" />
-                <span className="border-b border-transparent transition-colors group-hover:border-[#123c35]">
-                  Shipping: {formatMoney(417000)}, free from {formatMoney(8340000)}
-                </span>
-              </Link>
               <Link
                 href="/support/returns"
                 className="group flex items-center gap-3 text-[0.82rem] text-[#123c35] transition-opacity hover:opacity-80"
@@ -403,14 +394,8 @@ export default function ProductDetails({ product }) {
                 >
                   <div className="overflow-hidden">
                     <p className="text-[0.88rem] leading-relaxed text-[#3d534c]">
-                      This is a demo storefront. No products are shipped and no
-                      payment is collected.{" "}
-                      <Link
-                        href="/support/shipping"
-                        className="font-medium text-[#123c35] underline-offset-4 hover:underline"
-                      >
-                        Read delivery information.
-                      </Link>
+                      Orders are confirmed personally before dispatch. No
+                      payment is collected online.{" "}
                     </p>
                   </div>
                 </div>

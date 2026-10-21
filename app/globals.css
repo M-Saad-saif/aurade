@@ -1184,7 +1184,7 @@ em {
   font-size: 9px;
   margin-bottom: 0;
 }
-.demo-banner {
+.checkout-note {
   background: #e8ece3;
   border: 1px solid #d1d9ca;
   display: flex;
@@ -1274,6 +1274,31 @@ em {
   font-size: 13px;
   letter-spacing: 0.05em;
   margin-bottom: 25px;
+}
+.receipt-date {
+  color: var(--muted);
+  font-size: 11px;
+  margin: -15px 0 20px;
+}
+.receipt-whatsapp {
+  background: #f0f5f2;
+  border: 1px solid #d8e3dd;
+  padding: 24px;
+  margin: 0 0 35px;
+}
+.receipt-whatsapp p {
+  color: var(--muted);
+  font-size: 12px;
+  margin: 0 auto 18px;
+  max-width: 460px;
+}
+.receipt-whatsapp .button {
+  background: #25d366;
+  border-color: #25d366;
+}
+.receipt-whatsapp .button:hover {
+  background: #1ebe57;
+  border-color: #1ebe57;
 }
 .receipt-line {
   display: flex;

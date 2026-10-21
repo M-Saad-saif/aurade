@@ -197,7 +197,7 @@ export default async function Home() {
             [
               "truck",
               "Clear delivery",
-              "Review demo shipping costs before checkout.",
+              "Our team confirms delivery details with you after you order.",
             ],
             [
               "shield",
@@ -207,7 +207,7 @@ export default async function Home() {
             [
               "return",
               "No surprises",
-              "Illustrative products. Transparent demo checkout.",
+              "Transparent checkout. Every order confirmed personally.",
             ],
           ].map(([icon, title, copy]) => (
             <div
