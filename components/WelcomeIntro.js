@@ -29,7 +29,7 @@ export default function WelcomeIntro() {
       <MaskedHeading
         text="Welcome To A.U.R.A.D.E"
         mediaType="video"
-        src="/images/reel.mp4"
+        src="/videos/reel.mp4"
         poster="/images/logo.png"
         fillScale={1.55}
         parallax={35}
