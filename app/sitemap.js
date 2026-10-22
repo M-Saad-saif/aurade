@@ -1,4 +1,4 @@
-import { products, collections } from '@/lib/catalog';
+import {collections } from '@/lib/catalog';
 import { articles, supportPages } from '@/lib/content';
 export default function sitemap() {
   const base = process.env.NEXT_PUBLIC_SITE_URL;
@@ -10,7 +10,6 @@ export default function sitemap() {
     '/journal',
     '/trade',
     '/contact',
-    ...products.map((p) => `/watches/${p.id}`),
     ...collections.map((c) => `/collections/${c.slug}`),
     ...articles.map((a) => `/journal/${a.slug}`),
     ...Object.keys(supportPages).map((slug) => `/support/${slug}`),
