@@ -1,6 +1,8 @@
-'use client';
+"use client";
 
-import { useEffect, useRef, useState } from 'react';
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
 
 const VERTEX = `#version 300 es
 in vec2 aCorner;
@@ -80,20 +82,21 @@ void main() {
 }`;
 
 const ROOT =
-  'relative h-full w-full overflow-hidden outline-none @container text-[var(--infinite-menu-text)] [-webkit-tap-highlight-color:transparent] focus-visible:shadow-[inset_0_0_0_2px_var(--infinite-menu-text)]';
-const CANVAS = 'absolute inset-0 block h-full w-full cursor-grab touch-none active:cursor-grabbing';
-const LAYER = 'group pointer-events-none absolute inset-0';
-const CUSTOM = 'pointer-events-none absolute inset-0';
+  "relative h-full w-full overflow-hidden outline-none @container text-[var(--infinite-menu-text)] [-webkit-tap-highlight-color:transparent] focus-visible:shadow-[inset_0_0_0_2px_var(--infinite-menu-text)]";
+const CANVAS =
+  "absolute inset-0 block h-full w-full cursor-grab touch-none active:cursor-grabbing";
+const LAYER = "group pointer-events-none absolute inset-0";
+const CUSTOM = "pointer-events-none absolute inset-0";
 const MOTION =
-  'transition-[opacity,translate,scale] duration-[450ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-data-[moving=true]:opacity-0 group-data-[moving=true]:duration-[180ms]';
+  "transition-[opacity,translate,scale] duration-[450ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-data-[moving=true]:opacity-0 group-data-[moving=true]:duration-[180ms]";
 const TITLE =
   MOTION +
-  ' absolute top-1/2 right-[calc(50%_+_var(--infinite-menu-tile,160px)_+_28px)] m-0 max-w-[calc(50%_-_var(--infinite-menu-tile,160px)_-_48px)] -translate-y-1/2 text-right text-[clamp(1.2rem,calc((50cqw_-_var(--infinite-menu-tile,160px))_*_0.2),3.4rem)] leading-[1.05] font-semibold tracking-[-0.03em] text-balance [text-shadow:var(--infinite-menu-shadow)] group-data-[moving=true]:translate-x-4 group-data-[layout=stacked]:top-auto group-data-[layout=stacked]:right-[88px] group-data-[layout=stacked]:bottom-[52px] group-data-[layout=stacked]:left-5 group-data-[layout=stacked]:max-w-none group-data-[layout=stacked]:translate-y-0 group-data-[layout=stacked]:text-left group-data-[layout=stacked]:text-[clamp(1.3rem,6cqw,1.8rem)] group-data-[layout=stacked]:group-data-[moving=true]:translate-x-0 group-data-[layout=stacked]:group-data-[moving=true]:translate-y-3';
+  " absolute top-1/2 right-[calc(50%_+_var(--infinite-menu-tile,160px)_+_28px)] m-0 max-w-[calc(50%_-_var(--infinite-menu-tile,160px)_-_48px)] -translate-y-1/2 text-right text-[clamp(1.2rem,calc((50cqw_-_var(--infinite-menu-tile,160px))_*_0.2),3.4rem)] leading-[1.05] font-semibold tracking-[-0.03em] text-balance [text-shadow:var(--infinite-menu-shadow)] group-data-[moving=true]:translate-x-4 group-data-[layout=stacked]:top-auto group-data-[layout=stacked]:right-[88px] group-data-[layout=stacked]:bottom-[52px] group-data-[layout=stacked]:left-5 group-data-[layout=stacked]:max-w-none group-data-[layout=stacked]:translate-y-0 group-data-[layout=stacked]:text-left group-data-[layout=stacked]:text-[clamp(1.3rem,6cqw,1.8rem)] group-data-[layout=stacked]:group-data-[moving=true]:translate-x-0 group-data-[layout=stacked]:group-data-[moving=true]:translate-y-3";
 const DESCRIPTION =
   MOTION +
-  ' absolute top-1/2 left-[calc(50%_+_var(--infinite-menu-tile,160px)_+_28px)] m-0 max-w-[min(22ch,calc(50%_-_var(--infinite-menu-tile,160px)_-_48px))] -translate-y-1/2 text-[clamp(0.85rem,1.5cqw,1.05rem)] leading-[1.55] opacity-[0.72] [text-shadow:var(--infinite-menu-shadow)] group-data-[moving=true]:-translate-x-4 group-data-[layout=stacked]:top-auto group-data-[layout=stacked]:right-[88px] group-data-[layout=stacked]:bottom-[22px] group-data-[layout=stacked]:left-5 group-data-[layout=stacked]:max-w-[36ch] group-data-[layout=stacked]:translate-y-0 group-data-[layout=stacked]:truncate group-data-[layout=stacked]:group-data-[moving=true]:translate-x-0 group-data-[layout=stacked]:group-data-[moving=true]:translate-y-3';
+  " absolute top-1/2 left-[calc(50%_+_var(--infinite-menu-tile,160px)_+_28px)] m-0 max-w-[min(22ch,calc(50%_-_var(--infinite-menu-tile,160px)_-_48px))] -translate-y-1/2 text-[clamp(0.85rem,1.5cqw,1.05rem)] leading-[1.55] opacity-[0.72] [text-shadow:var(--infinite-menu-shadow)] group-data-[moving=true]:-translate-x-4 group-data-[layout=stacked]:top-auto group-data-[layout=stacked]:right-[88px] group-data-[layout=stacked]:bottom-[22px] group-data-[layout=stacked]:left-5 group-data-[layout=stacked]:max-w-[36ch] group-data-[layout=stacked]:translate-y-0 group-data-[layout=stacked]:truncate group-data-[layout=stacked]:group-data-[moving=true]:translate-x-0 group-data-[layout=stacked]:group-data-[moving=true]:translate-y-3";
 const ACTION =
-  'absolute bottom-[7%] left-1/2 grid h-[52px] w-[52px] -translate-x-1/2 cursor-pointer place-items-center rounded-full border-0 bg-[var(--infinite-menu-accent)] p-0 text-[var(--infinite-menu-on-accent)] pointer-events-auto transition-[opacity,translate,scale] duration-[450ms] ease-[cubic-bezier(0.22,1,0.36,1)] hover:scale-[1.06] focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-[var(--infinite-menu-accent)] group-data-[moving=true]:pointer-events-none group-data-[moving=true]:translate-y-4 group-data-[moving=true]:scale-[0.6] group-data-[moving=true]:opacity-0 group-data-[moving=true]:duration-[180ms] group-data-[layout=stacked]:right-5 group-data-[layout=stacked]:bottom-[22px] group-data-[layout=stacked]:left-auto group-data-[layout=stacked]:translate-x-0 group-data-[layout=stacked]:group-data-[moving=true]:translate-y-3';
+  "absolute bottom-[7%] left-1/2 grid h-[52px] w-[52px] -translate-x-1/2 cursor-pointer place-items-center rounded-full border-0 bg-[var(--infinite-menu-accent)] p-0 text-[var(--infinite-menu-on-accent)] pointer-events-auto transition-[opacity,translate,scale] duration-[450ms] ease-[cubic-bezier(0.22,1,0.36,1)] hover:scale-[1.06] focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-[var(--infinite-menu-accent)] group-data-[moving=true]:pointer-events-none group-data-[moving=true]:translate-y-4 group-data-[moving=true]:scale-[0.6] group-data-[moving=true]:opacity-0 group-data-[moving=true]:duration-[180ms] group-data-[layout=stacked]:right-5 group-data-[layout=stacked]:bottom-[22px] group-data-[layout=stacked]:left-auto group-data-[layout=stacked]:translate-x-0 group-data-[layout=stacked]:group-data-[moving=true]:translate-y-3";
 
 const GRID = 12;
 const RADIUS = 2;
@@ -102,8 +105,12 @@ const FRONT = [0, 0, 1];
 
 const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
 const dot = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
-const cross = (a, b) => [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]];
-const normalize = v => {
+const cross = (a, b) => [
+  a[1] * b[2] - a[2] * b[1],
+  a[2] * b[0] - a[0] * b[2],
+  a[0] * b[1] - a[1] * b[0],
+];
+const normalize = (v) => {
   const length = Math.hypot(v[0], v[1], v[2]) || 1;
   return [v[0] / length, v[1] / length, v[2] / length];
 };
@@ -111,23 +118,27 @@ const quatMultiply = (a, b) => [
   a[3] * b[0] + a[0] * b[3] + a[1] * b[2] - a[2] * b[1],
   a[3] * b[1] - a[0] * b[2] + a[1] * b[3] + a[2] * b[0],
   a[3] * b[2] + a[0] * b[1] - a[1] * b[0] + a[2] * b[3],
-  a[3] * b[3] - a[0] * b[0] - a[1] * b[1] - a[2] * b[2]
+  a[3] * b[3] - a[0] * b[0] - a[1] * b[1] - a[2] * b[2],
 ];
 const quatAxisAngle = (axis, angle) => {
   const s = Math.sin(angle / 2);
   return [axis[0] * s, axis[1] * s, axis[2] * s, Math.cos(angle / 2)];
 };
-const quatNormalize = q => {
+const quatNormalize = (q) => {
   const length = Math.hypot(q[0], q[1], q[2], q[3]) || 1;
   return [q[0] / length, q[1] / length, q[2] / length, q[3] / length];
 };
 const rotate = (q, v) => {
-  const t = cross(q, v).map(value => value * 2);
+  const t = cross(q, v).map((value) => value * 2);
   const u = cross(q, t);
-  return [v[0] + q[3] * t[0] + u[0], v[1] + q[3] * t[1] + u[1], v[2] + q[3] * t[2] + u[2]];
+  return [
+    v[0] + q[3] * t[0] + u[0],
+    v[1] + q[3] * t[1] + u[1],
+    v[2] + q[3] * t[2] + u[2],
+  ];
 };
 
-const sphere = count => {
+const sphere = (count) => {
   const golden = Math.PI * (3 - Math.sqrt(5));
   return Array.from({ length: count }, (_, i) => {
     const y = 1 - (2 * (i + 0.5)) / count;
@@ -136,12 +147,18 @@ const sphere = count => {
   });
 };
 
-const luminance = hex => {
-  const value = hex.replace('#', '');
-  const full = value.length === 3 ? value.replace(/./g, c => c + c) : value.slice(0, 6);
+const luminance = (hex) => {
+  const value = hex.replace("#", "");
+  const full =
+    value.length === 3 ? value.replace(/./g, (c) => c + c) : value.slice(0, 6);
   const n = parseInt(full, 16);
   if (Number.isNaN(n)) return 0;
-  return (0.2126 * ((n >> 16) & 255) + 0.7152 * ((n >> 8) & 255) + 0.0722 * (n & 255)) / 255;
+  return (
+    (0.2126 * ((n >> 16) & 255) +
+      0.7152 * ((n >> 8) & 255) +
+      0.0722 * (n & 255)) /
+    255
+  );
 };
 
 const compile = (gl, type, source) => {
@@ -155,7 +172,13 @@ const compile = (gl, type, source) => {
 };
 
 const ArrowIcon = () => (
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+  <svg
+    width="20"
+    height="20"
+    viewBox="0 0 24 24"
+    fill="none"
+    aria-hidden="true"
+  >
     <path
       d="M7 17L17 7M17 7H9M17 7V15"
       stroke="currentColor"
@@ -181,20 +204,21 @@ const InfiniteMenu = ({
   intro = true,
   showInfo = true,
   renderInfo,
-  theme = 'dark',
+  theme = "dark",
   accentColor,
   backgroundColor,
   onActiveChange,
   onItemClick,
-  className = '',
-  style
+  className = "",
+  style,
 }) => {
+  const router = useRouter();
   const rootRef = useRef(null);
   const canvasRef = useRef(null);
   const engineRef = useRef(null);
   const [active, setActive] = useState(0);
   const [moving, setMoving] = useState(true);
-  const [layout, setLayout] = useState('side');
+  const [layout, setLayout] = useState("side");
   const settings = {
     count: clamp(Math.round(count), 6, 400),
     tileSize: clamp(tileSize, 0.2, 1.2),
@@ -207,22 +231,26 @@ const InfiniteMenu = ({
     grayscale,
     dim: clamp(dim, 0, 1),
     intro,
-    theme: theme === 'light' ? 'light' : 'dark'
+    theme: theme === "light" ? "light" : "dark",
   };
   const settingsRef = useRef(settings);
   const itemsRef = useRef(items);
-  const callbacksRef = useRef({ onActiveChange, onItemClick });
+  const callbacksRef = useRef({ onActiveChange, onItemClick, router });
 
   useEffect(() => {
     settingsRef.current = settings;
     itemsRef.current = items;
-    callbacksRef.current = { onActiveChange, onItemClick };
+    callbacksRef.current = { onActiveChange, onItemClick, router };
   });
 
   useEffect(() => {
     const root = rootRef.current;
     const canvas = canvasRef.current;
-    const gl = canvas?.getContext('webgl2', { alpha: true, premultipliedAlpha: true, antialias: true });
+    const gl = canvas?.getContext("webgl2", {
+      alpha: true,
+      premultipliedAlpha: true,
+      antialias: true,
+    });
     if (!root || !canvas || !gl) return undefined;
 
     const vertex = compile(gl, gl.VERTEX_SHADER, VERTEX);
@@ -237,23 +265,23 @@ const InfiniteMenu = ({
 
     const uniforms = {};
     for (const name of [
-      'uOrientation',
-      'uProjection',
-      'uCamera',
-      'uRadius',
-      'uTileRadius',
-      'uSpin',
-      'uStretch',
-      'uShift',
-      'uAtlas',
-      'uCells',
-      'uInset',
-      'uRoundness',
-      'uGrayscale',
-      'uDim',
-      'uReveal',
-      'uPlaceholder',
-      'uTone'
+      "uOrientation",
+      "uProjection",
+      "uCamera",
+      "uRadius",
+      "uTileRadius",
+      "uSpin",
+      "uStretch",
+      "uShift",
+      "uAtlas",
+      "uCells",
+      "uInset",
+      "uRoundness",
+      "uGrayscale",
+      "uDim",
+      "uReveal",
+      "uPlaceholder",
+      "uTone",
     ]) {
       uniforms[name] = gl.getUniformLocation(program, name);
     }
@@ -261,7 +289,8 @@ const InfiniteMenu = ({
     const corners = [];
     const indices = [];
     for (let y = 0; y <= GRID; y++) {
-      for (let x = 0; x <= GRID; x++) corners.push((x / GRID) * 2 - 1, (y / GRID) * 2 - 1);
+      for (let x = 0; x <= GRID; x++)
+        corners.push((x / GRID) * 2 - 1, (y / GRID) * 2 - 1);
     }
     for (let y = 0; y < GRID; y++) {
       for (let x = 0; x < GRID; x++) {
@@ -275,15 +304,19 @@ const InfiniteMenu = ({
     const cornerBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, cornerBuffer);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(corners), gl.STATIC_DRAW);
-    const cornerLocation = gl.getAttribLocation(program, 'aCorner');
+    const cornerLocation = gl.getAttribLocation(program, "aCorner");
     gl.enableVertexAttribArray(cornerLocation);
     gl.vertexAttribPointer(cornerLocation, 2, gl.FLOAT, false, 0, 0);
     const indexBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
-    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indices), gl.STATIC_DRAW);
+    gl.bufferData(
+      gl.ELEMENT_ARRAY_BUFFER,
+      new Uint16Array(indices),
+      gl.STATIC_DRAW,
+    );
     const tileBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, tileBuffer);
-    const tileLocation = gl.getAttribLocation(program, 'aTile');
+    const tileLocation = gl.getAttribLocation(program, "aTile");
     gl.enableVertexAttribArray(tileLocation);
     gl.vertexAttribPointer(tileLocation, 4, gl.FLOAT, false, 0, 0);
     gl.vertexAttribDivisor(tileLocation, 1);
@@ -298,12 +331,38 @@ const InfiniteMenu = ({
     // neighboring photos together and can show up as static on small tiles.
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array([0, 0, 0, 0]));
+    gl.texImage2D(
+      gl.TEXTURE_2D,
+      0,
+      gl.RGBA,
+      1,
+      1,
+      0,
+      gl.RGBA,
+      gl.UNSIGNED_BYTE,
+      new Uint8Array([0, 0, 0, 0]),
+    );
     gl.uniform1i(uniforms.uAtlas, 0);
 
-    const reduce = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
-    const atlas = { canvas: document.createElement('canvas'), cells: 1, cell: 512, request: 0, dirty: false };
-    const drag = { active: false, id: -1, x: 0, y: 0, dx: 0, dy: 0, moved: 0, start: 0 };
+    const reduce =
+      window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ?? false;
+    const atlas = {
+      canvas: document.createElement("canvas"),
+      cells: 1,
+      cell: 512,
+      request: 0,
+      dirty: false,
+    };
+    const drag = {
+      active: false,
+      id: -1,
+      x: 0,
+      y: 0,
+      dx: 0,
+      dy: 0,
+      moved: 0,
+      start: 0,
+    };
     const state = {
       width: 1,
       height: 1,
@@ -324,9 +383,9 @@ const InfiniteMenu = ({
       idle: 0,
       settle: 0,
       tilePx: 0,
-      layout: 'side',
+      layout: "side",
       shift: 0,
-      started: false
+      started: false,
     };
     let raf = 0;
     let timer = 0;
@@ -359,7 +418,9 @@ const InfiniteMenu = ({
         usage[pick] += 1;
       });
       const data = new Float32Array(s.count * 4);
-      state.tiles.forEach((tile, i) => data.set([tile[0], tile[1], tile[2], state.assign[i]], i * 4));
+      state.tiles.forEach((tile, i) =>
+        data.set([tile[0], tile[1], tile[2], state.assign[i]], i * 4),
+      );
       gl.bindBuffer(gl.ARRAY_BUFFER, tileBuffer);
       gl.bufferData(gl.ARRAY_BUFFER, data, gl.STATIC_DRAW);
       let first = -1;
@@ -378,17 +439,24 @@ const InfiniteMenu = ({
       atlas.dirty = false;
       gl.activeTexture(gl.TEXTURE0);
       gl.bindTexture(gl.TEXTURE_2D, atlasTexture);
-      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, atlas.canvas);
+      gl.texImage2D(
+        gl.TEXTURE_2D,
+        0,
+        gl.RGBA,
+        gl.RGBA,
+        gl.UNSIGNED_BYTE,
+        atlas.canvas,
+      );
     };
 
-    const loadItems = list => {
+    const loadItems = (list) => {
       const request = ++atlas.request;
       const total = Math.max(1, list.length);
       atlas.cells = Math.ceil(Math.sqrt(total));
       atlas.cell = clamp(Math.floor(4096 / atlas.cells), 64, 512);
       atlas.canvas.width = atlas.cells * atlas.cell;
       atlas.canvas.height = atlas.cells * atlas.cell;
-      const ctx = atlas.canvas.getContext('2d');
+      const ctx = atlas.canvas.getContext("2d");
       ctx?.clearRect(0, 0, atlas.canvas.width, atlas.canvas.height);
       uploadAtlas();
       state.count = 0;
@@ -397,8 +465,8 @@ const InfiniteMenu = ({
       if (!pending) state.started = true;
       list.forEach((item, index) => {
         const image = new Image();
-        image.crossOrigin = 'anonymous';
-        image.decoding = 'async';
+        image.crossOrigin = "anonymous";
+        image.decoding = "async";
         const done = () => {
           pending -= 1;
           if (pending <= 0) state.started = true;
@@ -407,7 +475,10 @@ const InfiniteMenu = ({
         image.onload = () => {
           if (!alive || request !== atlas.request || !ctx) return;
           const size = atlas.cell;
-          const scale = Math.max(size / image.naturalWidth, size / image.naturalHeight);
+          const scale = Math.max(
+            size / image.naturalWidth,
+            size / image.naturalHeight,
+          );
           const width = image.naturalWidth * scale;
           const height = image.naturalHeight * scale;
           const x = (index % atlas.cells) * size;
@@ -416,7 +487,13 @@ const InfiniteMenu = ({
           ctx.beginPath();
           ctx.rect(x, y, size, size);
           ctx.clip();
-          ctx.drawImage(image, x + (size - width) / 2, y + (size - height) / 2, width, height);
+          ctx.drawImage(
+            image,
+            x + (size - width) / 2,
+            y + (size - height) / 2,
+            width,
+            height,
+          );
           ctx.restore();
           atlas.dirty = true;
           done();
@@ -425,12 +502,15 @@ const InfiniteMenu = ({
           if (!alive || request !== atlas.request) return;
           done();
         };
-        image.src = item?.image ?? '';
+        image.src = item?.image ?? "";
       });
     };
 
     const tileRadius = () =>
-      0.5 * RADIUS * Math.sqrt((4 * Math.PI) / Math.max(1, state.count)) * settingsRef.current.tileSize;
+      0.5 *
+      RADIUS *
+      Math.sqrt((4 * Math.PI) / Math.max(1, state.count)) *
+      settingsRef.current.tileSize;
 
     const restDistance = () => {
       const s = settingsRef.current;
@@ -441,13 +521,15 @@ const InfiniteMenu = ({
 
     const measure = () => {
       const rest = restDistance();
-      const radius = (tileRadius() / ((rest - RADIUS) * Math.tan(FOV / 2))) * (state.height / 2);
+      const radius =
+        (tileRadius() / ((rest - RADIUS) * Math.tan(FOV / 2))) *
+        (state.height / 2);
       const rounded = Math.round(radius);
       if (rounded !== state.tilePx) {
         state.tilePx = rounded;
-        root.style.setProperty('--infinite-menu-tile', `${rounded}px`);
+        root.style.setProperty("--infinite-menu-tile", `${rounded}px`);
       }
-      const mode = state.width / 2 - radius < 120 ? 'stacked' : 'side';
+      const mode = state.width / 2 - radius < 120 ? "stacked" : "side";
       if (mode !== state.layout) {
         state.layout = mode;
         setLayout(mode);
@@ -490,7 +572,7 @@ const InfiniteMenu = ({
       return best;
     };
 
-    const goTo = index => {
+    const goTo = (index) => {
       if (index < 0) return;
       state.target = index;
       state.speed = 0;
@@ -523,19 +605,27 @@ const InfiniteMenu = ({
       return best;
     };
 
-    const activate = index => {
+    const activate = (index) => {
       const list = itemsRef.current;
       if (!list.length) return;
       const itemIndex = (state.assign[index] ?? 0) % list.length;
       const item = list[itemIndex];
       const handler = callbacksRef.current.onItemClick;
       if (handler) handler(item, itemIndex);
-      else if (item?.link) window.open(item.link, item.link.startsWith('http') ? '_blank' : '_self', 'noopener');
+      else if (item?.link) {
+        if (item.link.startsWith("http")) {
+          window.open(item.link, "_blank", "noopener,noreferrer");
+        } else {
+          callbacksRef.current.router.push(item.link);
+        }
+      }
     };
 
     const report = () => {
       const list = itemsRef.current;
-      const index = list.length ? (state.assign[state.front] ?? 0) % list.length : 0;
+      const index = list.length
+        ? (state.assign[state.front] ?? 0) % list.length
+        : 0;
       if (!state.moving && index !== state.shown) {
         state.shown = index;
         setActive(index);
@@ -543,7 +633,7 @@ const InfiniteMenu = ({
       }
     };
 
-    const frame = now => {
+    const frame = (now) => {
       raf = 0;
       if (!alive || !visible) return;
       const s = settingsRef.current;
@@ -551,7 +641,8 @@ const InfiniteMenu = ({
       last = now;
       layout();
       if (atlas.dirty) uploadAtlas();
-      if (state.started) state.reveal = Math.min(1, state.reveal + dt / (reduce ? 0.01 : 0.7));
+      if (state.started)
+        state.reveal = Math.min(1, state.reveal + dt / (reduce ? 0.01 : 0.7));
       const minSide = Math.min(state.width, state.height);
 
       if (drag.active) {
@@ -559,9 +650,13 @@ const InfiniteMenu = ({
           const length = Math.hypot(drag.dx, drag.dy);
           const angle = (length / minSide) * 2.6;
           const axis = normalize([drag.dy, drag.dx, 0]);
-          state.orientation = quatNormalize(quatMultiply(quatAxisAngle(axis, angle), state.orientation));
+          state.orientation = quatNormalize(
+            quatMultiply(quatAxisAngle(axis, angle), state.orientation),
+          );
           const blend = 1 - Math.exp(-dt * 30);
-          state.axis = normalize(state.axis.map((value, i) => value + (axis[i] - value) * blend));
+          state.axis = normalize(
+            state.axis.map((value, i) => value + (axis[i] - value) * blend),
+          );
           state.speed += (angle / dt - state.speed) * blend;
           drag.dx = 0;
           drag.dy = 0;
@@ -571,7 +666,10 @@ const InfiniteMenu = ({
       } else {
         if (state.speed > 0.0005) {
           state.orientation = quatNormalize(
-            quatMultiply(quatAxisAngle(state.axis, state.speed * dt), state.orientation)
+            quatMultiply(
+              quatAxisAngle(state.axis, state.speed * dt),
+              state.orientation,
+            ),
           );
           state.speed *= Math.exp(-dt * (6 - 5 * s.inertia));
         } else {
@@ -583,9 +681,15 @@ const InfiniteMenu = ({
         const pull = clamp(1 - state.speed / 1.4, 0, 1);
         if (angle > 0.0002 && pull > 0) {
           const axis = cross(current, FRONT);
-          const step = angle * (1 - Math.exp(-dt * (state.target >= 0 ? 6 : 8))) * pull;
+          const step =
+            angle * (1 - Math.exp(-dt * (state.target >= 0 ? 6 : 8))) * pull;
           if (Math.hypot(axis[0], axis[1], axis[2]) > 1e-6) {
-            state.orientation = quatNormalize(quatMultiply(quatAxisAngle(normalize(axis), step), state.orientation));
+            state.orientation = quatNormalize(
+              quatMultiply(
+                quatAxisAngle(normalize(axis), step),
+                state.orientation,
+              ),
+            );
           }
         } else if (state.target >= 0 && state.speed === 0) {
           state.target = -1;
@@ -593,22 +697,35 @@ const InfiniteMenu = ({
         state.front = goal;
       }
 
-      const settledAngle = Math.acos(clamp(rotate(state.orientation, state.tiles[state.front])[2], -1, 1));
+      const settledAngle = Math.acos(
+        clamp(rotate(state.orientation, state.tiles[state.front])[2], -1, 1),
+      );
       const moving = drag.active || state.speed > 0.08 || settledAngle > 0.01;
       if (moving !== state.moving) {
         state.moving = moving;
         setMoving(moving);
       }
-      state.settle += ((moving ? 0 : 1) - state.settle) * (1 - Math.exp(-dt * (moving ? 10 : 3)));
+      state.settle +=
+        ((moving ? 0 : 1) - state.settle) *
+        (1 - Math.exp(-dt * (moving ? 10 : 3)));
       if (!moving) report();
 
       const rest = restDistance();
       const pullAmount = clamp(drag.active ? 1 : state.speed / 2.2, 0, 1);
-      const target = rest + s.pullBack * pullAmount * RADIUS * 1.25 + (1 - state.reveal) * RADIUS * 1.5;
+      const target =
+        rest +
+        s.pullBack * pullAmount * RADIUS * 1.25 +
+        (1 - state.reveal) * RADIUS * 1.5;
       if (!state.camera) state.camera = target + RADIUS;
       state.camera += (target - state.camera) * (1 - Math.exp(-dt * 4.5));
 
-      if (s.autoplay > 0 && !moving && !state.hovered && !state.focused && !reduce) {
+      if (
+        s.autoplay > 0 &&
+        !moving &&
+        !state.hovered &&
+        !state.focused &&
+        !reduce
+      ) {
         state.idle += dt;
         if (state.idle >= s.autoplay) {
           state.idle = 0;
@@ -619,14 +736,18 @@ const InfiniteMenu = ({
       }
 
       measure();
-      const shiftTarget = state.layout === 'stacked' ? Math.min(0.3, 72 / state.height) : 0;
+      const shiftTarget =
+        state.layout === "stacked" ? Math.min(0.3, 72 / state.height) : 0;
       state.shift += (shiftTarget - state.shift) * (1 - Math.exp(-dt * 6));
       render();
 
       const busy =
         moving ||
         Math.abs(target - state.camera) > 0.001 ||
-        Math.abs((state.layout === 'stacked' ? Math.min(0.3, 72 / state.height) : 0) - state.shift) > 0.0005 ||
+        Math.abs(
+          (state.layout === "stacked" ? Math.min(0.3, 72 / state.height) : 0) -
+            state.shift,
+        ) > 0.0005 ||
         Math.abs((moving ? 0 : 1) - state.settle) > 0.002 ||
         state.reveal < 1 ||
         atlas.dirty ||
@@ -636,7 +757,10 @@ const InfiniteMenu = ({
         last = 0;
         if (s.autoplay > 0 && !state.hovered && !state.focused && !reduce) {
           clearTimeout(timer);
-          timer = window.setTimeout(wake, Math.max(16, (s.autoplay - state.idle) * 1000));
+          timer = window.setTimeout(
+            wake,
+            Math.max(16, (s.autoplay - state.idle) * 1000),
+          );
         }
       }
     };
@@ -663,7 +787,7 @@ const InfiniteMenu = ({
         0,
         0,
         (2 * far * near) / (near - far),
-        0
+        0,
       ]);
       gl.viewport(0, 0, canvas.width, canvas.height);
       gl.clearColor(0, 0, 0, 0);
@@ -678,7 +802,13 @@ const InfiniteMenu = ({
       gl.uniform1f(uniforms.uCamera, state.camera);
       gl.uniform1f(uniforms.uRadius, RADIUS);
       gl.uniform1f(uniforms.uTileRadius, tileRadius());
-      gl.uniform4f(uniforms.uSpin, state.axis[0], state.axis[1], state.axis[2], reduce ? 0 : state.speed);
+      gl.uniform4f(
+        uniforms.uSpin,
+        state.axis[0],
+        state.axis[1],
+        state.axis[2],
+        reduce ? 0 : state.speed,
+      );
       gl.uniform1f(uniforms.uStretch, s.stretch);
       gl.uniform1f(uniforms.uShift, state.shift);
       gl.uniform1f(uniforms.uCells, atlas.cells);
@@ -687,7 +817,7 @@ const InfiniteMenu = ({
       gl.uniform1f(uniforms.uGrayscale, s.grayscale ? 1 : 0);
       gl.uniform1f(uniforms.uDim, s.dim * (0.45 + 0.55 * state.settle));
       gl.uniform1f(uniforms.uReveal, state.reveal);
-      if (s.theme === 'light') {
+      if (s.theme === "light") {
         gl.uniform3f(uniforms.uPlaceholder, 0.9, 0.9, 0.91);
         gl.uniform3f(uniforms.uTone, 1, 1, 1);
       } else {
@@ -697,7 +827,13 @@ const InfiniteMenu = ({
       gl.activeTexture(gl.TEXTURE0);
       gl.bindTexture(gl.TEXTURE_2D, atlasTexture);
       gl.bindVertexArray(vao);
-      gl.drawElementsInstanced(gl.TRIANGLES, indices.length, gl.UNSIGNED_SHORT, 0, state.tiles.length);
+      gl.drawElementsInstanced(
+        gl.TRIANGLES,
+        indices.length,
+        gl.UNSIGNED_SHORT,
+        0,
+        state.tiles.length,
+      );
       gl.bindVertexArray(null);
     };
 
@@ -707,8 +843,8 @@ const InfiniteMenu = ({
       raf = requestAnimationFrame(frame);
     };
 
-    const onPointerDown = event => {
-      if (event.pointerType === 'mouse' && event.button !== 0) return;
+    const onPointerDown = (event) => {
+      if (event.pointerType === "mouse" && event.button !== 0) return;
       canvas.setPointerCapture?.(event.pointerId);
       drag.active = true;
       drag.id = event.pointerId;
@@ -722,7 +858,7 @@ const InfiniteMenu = ({
       wake();
     };
 
-    const onPointerMove = event => {
+    const onPointerMove = (event) => {
       if (!drag.active || event.pointerId !== drag.id) return;
       const dx = event.clientX - drag.x;
       const dy = event.clientY - drag.y;
@@ -734,7 +870,7 @@ const InfiniteMenu = ({
       wake();
     };
 
-    const onPointerUp = event => {
+    const onPointerUp = (event) => {
       if (!drag.active || event.pointerId !== drag.id) return;
       drag.active = false;
       canvas.releasePointerCapture?.(event.pointerId);
@@ -746,12 +882,22 @@ const InfiniteMenu = ({
       wake();
     };
 
-    const onKeyDown = event => {
-      const directions = { ArrowRight: [1, 0], ArrowLeft: [-1, 0], ArrowUp: [0, 1], ArrowDown: [0, -1] };
+    const onKeyDown = (event) => {
+      const directions = {
+        ArrowRight: [1, 0],
+        ArrowLeft: [-1, 0],
+        ArrowUp: [0, 1],
+        ArrowDown: [0, -1],
+      };
       if (directions[event.key]) {
         event.preventDefault();
-        goTo(neighbor(state.target >= 0 ? state.target : state.front, directions[event.key]));
-      } else if (event.key === 'Enter' && event.target === root) {
+        goTo(
+          neighbor(
+            state.target >= 0 ? state.target : state.front,
+            directions[event.key],
+          ),
+        );
+      } else if (event.key === "Enter" && event.target === root) {
         event.preventDefault();
         activate(state.front);
       }
@@ -767,7 +913,7 @@ const InfiniteMenu = ({
     const onFocusIn = () => {
       state.focused = true;
     };
-    const onFocusOut = event => {
+    const onFocusOut = (event) => {
       if (root.contains(event.relatedTarget)) return;
       state.focused = false;
       wake();
@@ -785,19 +931,19 @@ const InfiniteMenu = ({
 
     engineRef.current = { loadItems, wake };
 
-    canvas.addEventListener('pointerdown', onPointerDown);
-    canvas.addEventListener('pointermove', onPointerMove);
-    canvas.addEventListener('pointerup', onPointerUp);
-    canvas.addEventListener('pointercancel', onPointerUp);
-    root.addEventListener('keydown', onKeyDown);
-    root.addEventListener('pointerenter', onEnter);
-    root.addEventListener('pointerleave', onLeave);
-    root.addEventListener('focusin', onFocusIn);
-    root.addEventListener('focusout', onFocusOut);
+    canvas.addEventListener("pointerdown", onPointerDown);
+    canvas.addEventListener("pointermove", onPointerMove);
+    canvas.addEventListener("pointerup", onPointerUp);
+    canvas.addEventListener("pointercancel", onPointerUp);
+    root.addEventListener("keydown", onKeyDown);
+    root.addEventListener("pointerenter", onEnter);
+    root.addEventListener("pointerleave", onLeave);
+    root.addEventListener("focusin", onFocusIn);
+    root.addEventListener("focusout", onFocusOut);
     const resizeObserver = new ResizeObserver(resize);
     resizeObserver.observe(root);
-    const visibility = new IntersectionObserver(entries => {
-      visible = entries.some(entry => entry.isIntersecting);
+    const visibility = new IntersectionObserver((entries) => {
+      visible = entries.some((entry) => entry.isIntersecting);
       if (visible) {
         last = 0;
         wake();
@@ -812,15 +958,15 @@ const InfiniteMenu = ({
       cancelAnimationFrame(raf);
       clearTimeout(timer);
       engineRef.current = null;
-      canvas.removeEventListener('pointerdown', onPointerDown);
-      canvas.removeEventListener('pointermove', onPointerMove);
-      canvas.removeEventListener('pointerup', onPointerUp);
-      canvas.removeEventListener('pointercancel', onPointerUp);
-      root.removeEventListener('keydown', onKeyDown);
-      root.removeEventListener('pointerenter', onEnter);
-      root.removeEventListener('pointerleave', onLeave);
-      root.removeEventListener('focusin', onFocusIn);
-      root.removeEventListener('focusout', onFocusOut);
+      canvas.removeEventListener("pointerdown", onPointerDown);
+      canvas.removeEventListener("pointermove", onPointerMove);
+      canvas.removeEventListener("pointerup", onPointerUp);
+      canvas.removeEventListener("pointercancel", onPointerUp);
+      root.removeEventListener("keydown", onKeyDown);
+      root.removeEventListener("pointerenter", onEnter);
+      root.removeEventListener("pointerleave", onLeave);
+      root.removeEventListener("focusin", onFocusIn);
+      root.removeEventListener("focusout", onFocusOut);
       resizeObserver.disconnect();
       visibility.disconnect();
       gl.deleteTexture(atlasTexture);
@@ -843,12 +989,12 @@ const InfiniteMenu = ({
   });
 
   const current = items.length ? items[active % items.length] : null;
-  const ink = settings.theme === 'light' ? '#120f17' : '#ffffff';
+  const ink = settings.theme === "light" ? "#120f17" : "#ffffff";
   const accent = accentColor || ink;
-  const onAccent = luminance(accent) > 0.5 ? '#120f17' : '#ffffff';
+  const onAccent = luminance(accent) > 0.5 ? "#120f17" : "#ffffff";
   const hasAction = Boolean(current?.link || onItemClick);
 
-  const handleAction = event => {
+  const handleAction = (event) => {
     if (!current) return;
     if (onItemClick) {
       onItemClick(current, active % items.length);
@@ -859,47 +1005,57 @@ const InfiniteMenu = ({
   return (
     <div
       ref={rootRef}
-      className={`${ROOT}${className ? ` ${className}` : ''}`}
+      className={`${ROOT}${className ? ` ${className}` : ""}`}
       tabIndex={0}
       role="group"
       aria-roledescription="carousel"
-      aria-label={current?.title || 'Infinite menu'}
+      aria-label={current?.title || "Infinite menu"}
       style={{
         backgroundColor,
-        '--infinite-menu-text': ink,
-        '--infinite-menu-accent': accent,
-        '--infinite-menu-on-accent': onAccent,
-        '--infinite-menu-shadow':
-          settings.theme === 'light' ? '0 2px 18px rgba(255, 255, 255, 0.7)' : '0 2px 18px rgba(0, 0, 0, 0.45)',
-        ...style
+        "--infinite-menu-text": ink,
+        "--infinite-menu-accent": accent,
+        "--infinite-menu-on-accent": onAccent,
+        "--infinite-menu-shadow":
+          settings.theme === "light"
+            ? "0 2px 18px rgba(255, 255, 255, 0.7)"
+            : "0 2px 18px rgba(0, 0, 0, 0.45)",
+        ...style,
       }}
     >
       <canvas ref={canvasRef} className={CANVAS} />
       {showInfo &&
         current &&
         (renderInfo ? (
-          <div className={CUSTOM}>{renderInfo(current, active % items.length, moving)}</div>
+          <div className={CUSTOM}>
+            {renderInfo(current, active % items.length, moving)}
+          </div>
         ) : (
           <div className={LAYER} data-moving={moving} data-layout={layout}>
             {current.title && <h2 className={TITLE}>{current.title}</h2>}
-            {current.description && <p className={DESCRIPTION}>{current.description}</p>}
+            {current.description && (
+              <p className={DESCRIPTION}>{current.description}</p>
+            )}
             {hasAction &&
               (current.link ? (
-                <a
+                <Link
                   className={ACTION}
                   href={current.link}
-                  target={current.link.startsWith('http') ? '_blank' : undefined}
-                  rel={current.link.startsWith('http') ? 'noreferrer' : undefined}
-                  aria-label={current.title ? `Open ${current.title}` : 'Open'}
+                  target={
+                    current.link.startsWith("http") ? "_blank" : undefined
+                  }
+                  rel={
+                    current.link.startsWith("http") ? "noreferrer" : undefined
+                  }
+                  aria-label={current.title ? `Open ${current.title}` : "Open"}
                   onClick={handleAction}
                 >
                   <ArrowIcon />
-                </a>
+                </Link>
               ) : (
                 <button
                   type="button"
                   className={ACTION}
-                  aria-label={current.title ? `Open ${current.title}` : 'Open'}
+                  aria-label={current.title ? `Open ${current.title}` : "Open"}
                   onClick={handleAction}
                 >
                   <ArrowIcon />

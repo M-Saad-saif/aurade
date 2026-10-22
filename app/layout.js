@@ -4,6 +4,7 @@ import Footer from "@/components/Footer";
 import { StoreProvider } from "@/components/StoreProvider";
 import { getCatalog } from "@/lib/watches";
 import Sociallinks from "@/components/Sociallinks";
+import WelcomeIntro from "@/components/WelcomeIntro";
 
 export const dynamic = "force-dynamic";
 
@@ -97,6 +98,7 @@ export default async function RootLayout({ children }) {
     <html lang="en">
       <body>
         <StoreProvider catalog={catalog}>
+          <WelcomeIntro />
           <a href="#main" className="skip-link">
             Skip to content
           </a>

@@ -95,7 +95,7 @@ export default function ProductDetails({ product }) {
                     <WatchImage
                       src={src}
                       alt={`${product.name} watch photograph ${index + 1}`}
-                      priority={index === 0} // Only prioritize the first image for load speed
+                      priority={index === 0}
                     />
                   </div>
                 ))}
@@ -138,13 +138,11 @@ export default function ProductDetails({ product }) {
                 </span>
               )}
 
-              {/* Reference chip */}
               <span className="absolute bottom-4 left-4 z-20 rounded-full bg-white/90 px-3 py-1 text-[0.62rem] font-medium uppercase tracking-[2px] text-[#123c35] backdrop-blur-sm">
                 {product.reference}
               </span>
             </div>
 
-            {/* --- THUMBNAILS --- */}
             {product.images.length > 1 && (
               <div className="mt-4 grid grid-cols-4 gap-3">
                 {product.images.map((src, index) => {
@@ -187,7 +185,7 @@ export default function ProductDetails({ product }) {
             <p className="mt-6 text-[1.85rem] font-semibold tracking-[-0.5px] text-[#123c35]">
               {formatMoney(product.price)}{" "}
               <span className="text-[0.8rem] font-medium uppercase tracking-[2px] text-[#5e7a70]">
-                 PKR
+                PKR
               </span>
             </p>
 
@@ -298,18 +296,6 @@ export default function ProductDetails({ product }) {
               {ready ? available : product.stock} available
             </p>
 
-            <div className="mt-6 grid grid-cols-1 gap-3 border-y border-[#d8e3dd] py-5 sm:grid-cols-2">
-              <Link
-                href="/support/returns"
-                className="group flex items-center gap-3 text-[0.82rem] text-[#123c35] transition-opacity hover:opacity-80"
-              >
-                <Icon name="return" />
-                <span className="border-b border-transparent transition-colors group-hover:border-[#123c35]">
-                  Returns information
-                </span>
-              </Link>
-            </div>
-
             <div className="mt-2 divide-y divide-[#d8e3dd]">
               <div className="py-5">
                 <button
@@ -365,76 +351,6 @@ export default function ProductDetails({ product }) {
                         </div>
                       ))}
                     </dl>
-                  </div>
-                </div>
-              </div>
-
-              <div className="py-4">
-                <button
-                  type="button"
-                  onClick={() => setDeliveryOpen((v) => !v)}
-                  aria-expanded={deliveryOpen}
-                  className="flex w-full cursor-pointer items-center justify-between text-left text-[0.95rem] font-medium text-[#123c35]"
-                >
-                  Delivery &amp; returns
-                  <span
-                    className={`text-[#5e7a70] transition-transform duration-300 ${
-                      deliveryOpen ? "rotate-45" : ""
-                    }`}
-                  >
-                    +
-                  </span>
-                </button>
-                <div
-                  className={`grid transition-all duration-300 ease-in-out ${
-                    deliveryOpen
-                      ? "mt-3 grid-rows-[1fr] opacity-100"
-                      : "grid-rows-[0fr] opacity-0"
-                  }`}
-                >
-                  <div className="overflow-hidden">
-                    <p className="text-[0.88rem] leading-relaxed text-[#3d534c]">
-                      Orders are confirmed personally before dispatch. No
-                      payment is collected online.{" "}
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="py-4">
-                <button
-                  type="button"
-                  onClick={() => setCareOpen((v) => !v)}
-                  aria-expanded={careOpen}
-                  className="flex w-full cursor-pointer items-center justify-between text-left text-[0.95rem] font-medium text-[#123c35]"
-                >
-                  Care &amp; keeping
-                  <span
-                    className={`text-[#5e7a70] transition-transform duration-300 ${
-                      careOpen ? "rotate-45" : ""
-                    }`}
-                  >
-                    +
-                  </span>
-                </button>
-                <div
-                  className={`grid transition-all duration-300 ease-in-out ${
-                    careOpen
-                      ? "mt-3 grid-rows-[1fr] opacity-100"
-                      : "grid-rows-[0fr] opacity-0"
-                  }`}
-                >
-                  <div className="overflow-hidden">
-                    <p className="text-[0.88rem] leading-relaxed text-[#3d534c]">
-                      Follow the actual manufacturer&apos;s care instructions
-                      for any watch you purchase.{" "}
-                      <Link
-                        href="/support/care"
-                        className="font-medium text-[#123c35] underline-offset-4 hover:underline"
-                      >
-                        Explore our care checklist.
-                      </Link>
-                    </p>
                   </div>
                 </div>
               </div>

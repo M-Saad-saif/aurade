@@ -368,7 +368,7 @@ export default function AdminWatchManager({ watches }) {
           </label>
           {video && (
             <div className="sm:col-span-2">
-              <div className="relative aspect-4/5 w-full max-w-[200px] overflow-hidden rounded-sm border border-[#d8e3dd] bg-white">
+              <div className="relative aspect-4/5 w-full max-w-50 overflow-hidden rounded-sm border border-[#d8e3dd] bg-white">
                 {video.kind === "gif" ? (
                   <img
                     src={video.url}
