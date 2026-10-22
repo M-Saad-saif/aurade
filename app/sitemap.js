@@ -10,6 +10,7 @@ export default function sitemap() {
     '/journal',
     '/trade',
     '/contact',
+    '/gallery',
     ...collections.map((c) => `/collections/${c.slug}`),
     ...articles.map((a) => `/journal/${a.slug}`),
     ...Object.keys(supportPages).map((slug) => `/support/${slug}`),
