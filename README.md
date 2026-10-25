@@ -67,12 +67,14 @@ The configuration starts the dev server automatically and runs desktop Chromium 
 
 ## Customize
 
-1. Edit `lib/catalog.js` for actual products, stable IDs, integer-paisa prices, stock, strap options and images. Add multiple accurate images to a product's `images` array to enable gallery thumbnails.
+1. Edit `lib/catalog.js` for actual products, stable IDs, PKR prices, stock, strap options and images. Add multiple accurate images to a product's `images` array to enable gallery thumbnails.
 2. Edit CSS variables at the top of `app/globals.css` for brand colors and fonts.
 3. Replace remote photos with accurate, licensed local files in `public/images`, then set catalog image paths to `/images/your-photo.jpg`. Keep a photo for every actual variant if you need image switching.
 4. Edit `lib/content.js` for editorial and information content.
-5. Change the formatter in `lib/catalog.js` to change currency. Also update hard-coded PKR labels and sample prices consistently (amounts are stored as integer paisa, i.e. 1/100 PKR). Changing a currency symbol alone does not convert prices.
+5. Change the formatter in `lib/catalog.js` to change currency. Watch and order amounts are stored as PKR values. Changing a currency symbol alone does not convert prices.
 6. Connect the contact, trade and newsletter forms to a validated backend before removing demo acknowledgements.
+
+Existing records created before PKR storage was introduced contain paisa. Preview their conversion with `npm run migrate:prices-to-pkr`; apply it once with `npm run migrate:prices-to-pkr -- --apply` after setting `MONGODB_URI`.
 
 ## Important production boundary
 

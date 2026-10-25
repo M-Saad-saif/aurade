@@ -182,12 +182,20 @@ export default function ProductDetails({ product }) {
               {product.movement} · {product.caseSize} · {product.dial} dial
             </p>
 
-            <p className="mt-6 text-[1.85rem] font-semibold tracking-[-0.5px] text-[#123c35]">
-              {formatMoney(product.price)}{" "}
-              <span className="text-[0.8rem] font-medium uppercase tracking-[2px] text-[#5e7a70]">
-                PKR
-              </span>
-            </p>
+            <div className="mt-6">
+              {product.originalPrice > product.price && (
+                <p className="mb-[-13px] text-[0.9rem] font-medium text-[#5e7a70] line-through">
+                  {formatMoney(product.originalPrice)}
+                </p>
+              )}
+
+              <p className="text-[1.85rem] font-semibold tracking-[-0.5px] text-[#123c35]">
+                {formatMoney(product.price)}{" "}
+                <span className="text-[0.8rem] font-medium uppercase tracking-[2px] text-[#5e7a70]">
+                  PKR
+                </span>
+              </p>
+            </div>
 
             <p className="mt-5 max-w-prose text-[0.98rem] leading-relaxed text-[#3d534c]">
               {product.description}

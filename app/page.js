@@ -135,7 +135,7 @@ export default async function Home() {
           href="/shop"
           label="Shop all watches"
         />
-        <div className="product-grid">
+        <div className="product-grid max-sm:grid-cols-1">
           {catalog.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}

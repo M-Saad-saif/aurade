@@ -20,6 +20,7 @@ export default async function AdminPage() {
     title: doc.title,
     description: doc.description,
     price: doc.price,
+    originalPrice: doc.originalPrice,
     category: doc.category,
     imageUrl: doc.imageUrl,
     imageCount: doc.images?.length || 1,

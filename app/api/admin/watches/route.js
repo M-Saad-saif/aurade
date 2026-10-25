@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { isAdmin } from "@/lib/adminAuth";
 import { connectDB } from "@/lib/mongodb";
 import { deleteMedia, uploadImage, uploadVideo } from "@/lib/cloudinary";
@@ -6,7 +7,7 @@ import Watch, { WATCH_CATEGORIES } from "@/models/Watch";
 
 export const runtime = "nodejs";
 
-const MAX_IMAGE_BYTES = 4 * 1024 * 1024; 
+const MAX_IMAGE_BYTES = 4 * 1024 * 1024;
 const MAX_IMAGES = 3;
 const ALLOWED_IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp"];
 const MAX_VIDEO_BYTES = 25 * 1024 * 1024;
@@ -28,9 +29,16 @@ export async function POST(request) {
   const description = String(form.get("description") || "").trim();
   const category = String(form.get("category") || "").trim();
   const pricePkr = Number(form.get("price"));
+
+  const originalPriceRaw = String(form.get("originalPrice") ?? "")
+    .replace(/[ ,]/g, "")
+    .trim();
+  const originalPricePkr = originalPriceRaw ? Number(originalPriceRaw) : null;
+
   const files = form
     .getAll("images")
     .filter((entry) => entry && typeof entry !== "string" && entry.size > 0);
+    
   const rawVideo = form.get("video");
   const videoFile =
     rawVideo && typeof rawVideo !== "string" && rawVideo.size > 0
@@ -62,6 +70,17 @@ export async function POST(request) {
   if (!Number.isFinite(pricePkr) || pricePkr < 0.01 || pricePkr > 278_000_000)
     return fail("Enter a valid price.");
 
+  if (
+    originalPricePkr !== null &&
+    (!Number.isFinite(originalPricePkr) ||
+      originalPricePkr < 0.01 ||
+      originalPricePkr > 278_000_000)
+  )
+    return fail("Enter a valid original price.");
+
+  if (originalPricePkr !== null && originalPricePkr <= pricePkr)
+    return fail("Original price must be higher than the price.");
+
   if (!Number.isInteger(stock) || stock < 0 || stock > MAX_STOCK)
     return fail("Enter a valid stock quantity (0 or more).");
 
@@ -86,7 +105,7 @@ export async function POST(request) {
       return fail("Clip must be 25 MB or smaller.");
   }
 
-  const uploaded = []; 
+  const uploaded = [];
   try {
     const images = [];
     for (const file of files) {
@@ -126,7 +145,11 @@ export async function POST(request) {
       straps: straps.length ? straps : ["Standard"],
       stock,
       badge,
-      price: Math.round(pricePkr * 100),
+      price: pricePkr,
+      originalPrice:
+        originalPricePkr === null
+          ? undefined
+          : originalPricePkr,
       images,
       imageUrl: images[0].url,
       imagePublicId: images[0].publicId,
@@ -134,8 +157,29 @@ export async function POST(request) {
       videoPublicId: video?.publicId,
       videoType: video?.type,
     });
+    const priceUpdate = {
+      priceUnit: "PKR",
+      ...(originalPricePkr === null
+        ? {}
+        : { originalPrice: originalPricePkr }),
+    };
+    await Watch.collection.updateOne(
+      { _id: watch._id },
+      { $set: priceUpdate },
+    );
+    const savedPrices = await Watch.collection.findOne(
+      { _id: watch._id },
+      { projection: { price: 1, originalPrice: 1 } },
+    );
+    revalidatePath("/");
+    revalidatePath("/shop");
     return NextResponse.json(
-      { ok: true, id: String(watch._id) },
+      {
+        ok: true,
+        id: String(watch._id),
+        price: savedPrices?.price ?? null,
+        originalPrice: savedPrices?.originalPrice ?? null,
+      },
       { status: 201 },
     );
   } catch (error) {

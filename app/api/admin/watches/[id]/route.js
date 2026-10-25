@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { isAdmin } from "@/lib/adminAuth";
 import { connectDB } from "@/lib/mongodb";
 import { deleteImage, deleteMedia } from "@/lib/cloudinary";
@@ -34,8 +35,13 @@ export async function DELETE(_request, { params }) {
       await deleteMedia(
         watch.videoPublicId,
         watch.videoType === "video" ? "video" : "image",
-      ).catch((error) => console.error("Cloudinary clip delete failed:", error));
+      ).catch((error) =>
+        console.error("Cloudinary clip delete failed:", error),
+      );
     }
+    revalidatePath("/");
+    revalidatePath("/shop");
+    revalidatePath(`/watches/${id}`);
     return NextResponse.json({ ok: true });
   } catch (error) {
     console.error("Delete watch failed:", error);

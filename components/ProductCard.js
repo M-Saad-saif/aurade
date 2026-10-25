@@ -138,16 +138,25 @@ export default function ProductCard({ product }) {
           </div>
 
           <div className="relative flex min-w-0 items-center justify-between gap-2 rounded-xl border border-gray-200 bg-white px-2.5 py-2 text-[10px] font-medium text-gray-800 shadow-sm sm:px-3 sm:text-xs">
-            <span className="shrink-0 truncate text-[9px] sm:text-[10px]">Case size</span>
+            <span className="shrink-0 truncate text-[9px] sm:text-[10px]">
+              Case size
+            </span>
             <span className="truncate">{product.caseSize}</span>
           </div>
         </div>
 
         {/* Footer / Price & Add to Cart */}
         <div className="mt-auto flex flex-col gap-2.5 border-t border-gray-100 pt-3 min-[520px]:flex-row min-[520px]:items-center min-[520px]:justify-between min-[520px]:gap-3 sm:pt-4">
-          <span className="text-base font-semibold tracking-tight text-gray-900 sm:text-2xl">
-            {formatMoney(product.price)}
-          </span>
+          <div className="flex flex-col">
+            {product.originalPrice > product.price && (
+              <span className="text-[11px] font-medium bg-[#f0f5f2] rounded-full text-center text-gray-600 line-through sm:text-sm">
+                {formatMoney(product.originalPrice)}
+              </span>
+            )}
+            <span className="text-base font-semibold tracking-tight text-gray-900 sm:text-2xl">
+              {formatMoney(product.price)}
+            </span>
+          </div>
 
           <Link
             href={href}

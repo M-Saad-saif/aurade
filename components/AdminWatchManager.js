@@ -31,6 +31,7 @@ const DANGER_CLASS =
 export default function AdminWatchManager({ watches }) {
   const router = useRouter();
   const formRef = useRef(null);
+  const originalPriceInputRef = useRef(null);
   const fileInputRef = useRef(null);
   const videoInputRef = useRef(null);
   const [items, setItems] = useState([]);
@@ -115,24 +116,45 @@ export default function AdminWatchManager({ watches }) {
 
   async function onSubmit(event) {
     event.preventDefault();
+
     if (!items.length)
       return setMessage({
         type: "error",
         text: "Please choose at least one image.",
       });
+
     setSaving(true);
     setMessage({ type: "", text: "" });
+
     const body = new FormData(event.currentTarget);
+    body.set("originalPrice", originalPriceInputRef.current?.value ?? "");
     items.forEach((item) => body.append("images", item.file));
+
     if (video) body.append("video", video.file);
+
     const res = await fetch("/api/admin/watches", { method: "POST", body });
     const data = await res.json().catch(() => ({}));
+
     setSaving(false);
     if (!res.ok)
       return setMessage({
         type: "error",
         text: data.error || "Upload failed.",
       });
+
+    const submittedOriginalPrice = Number(
+      originalPriceInputRef.current?.value.replace(/[ ,]/g, ""),
+    );
+
+    if (
+      submittedOriginalPrice > 0 &&
+      data.originalPrice !== submittedOriginalPrice
+    )
+      return setMessage({
+        type: "error",
+        text: "The watch was created, but its original price was not saved. Please refresh and check the watch before adding it again.",
+      });
+
     clearImages();
     formRef.current.reset();
     setMessage({ type: "success", text: "Watch added." });
@@ -211,6 +233,17 @@ export default function AdminWatchManager({ watches }) {
               min="0.01"
               step="0.01"
               placeholder="42000.00"
+            />
+          </label>
+          <label>
+            <span className={LABEL_CLASS}>Original price (PKR) — optional</span>
+            <input
+              className={FIELD_CLASS}
+              ref={originalPriceInputRef}
+              name="originalPrice"
+              type="text"
+              inputMode="decimal"
+              placeholder="52000.00"
             />
           </label>
           <label>
@@ -439,9 +472,16 @@ export default function AdminWatchManager({ watches }) {
                 <h3 className="text-xl font-semibold tracking-[-0.4px] text-[#123c35]">
                   {watch.title}
                 </h3>
-                <p className="text-[1.05rem] font-semibold text-[#123c35]">
-                  {formatMoney(watch.price)}
-                </p>
+                <div className="flex flex-col">
+                  {watch.originalPrice > watch.price && (
+                    <span className="text-[0.7rem] font-medium text-[#2dffb2] line-through">
+                      {formatMoney(watch.originalPrice)}
+                    </span>
+                  )}
+                  <p className="text-[1.05rem] font-semibold text-[#123c35]">
+                    {formatMoney(watch.price)}
+                  </p>
+                </div>
                 <p className="line-clamp-2 text-[0.85rem] text-[#5e7a70]">
                   {watch.description}
                 </p>

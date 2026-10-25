@@ -45,6 +45,7 @@ const OrderSchema = new mongoose.Schema(
     subtotal: { type: Number, required: true, min: 0 },
     total: { type: Number, required: true, min: 0 },
     currency: { type: String, default: "PKR" },
+    priceUnit: { type: String, enum: ["PKR"], default: "PKR" },
     status: { type: String, enum: ORDER_STATUSES, default: "new" },
     notifications: {
       email: { sent: Boolean, error: String },

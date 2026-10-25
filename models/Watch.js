@@ -14,7 +14,9 @@ const WatchSchema = new mongoose.Schema(
   {
     title: { type: String, required: true, trim: true, maxlength: 120 },
     description: { type: String, required: true, trim: true, maxlength: 2000 },
-    price: { type: Number, required: true, min: 1 },
+    price: { type: Number, required: true, min: 0.01 },
+    originalPrice: { type: Number, min: 0.01 },
+    priceUnit: { type: String, enum: ["PKR"], default: "PKR" },
     category: { type: String, enum: WATCH_CATEGORIES, default: "everyday" },
     movement: { type: String, trim: true, maxlength: 60, default: "Quartz" },
     caseSize: { type: String, trim: true, maxlength: 40, default: "One size" },
