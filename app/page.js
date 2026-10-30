@@ -6,7 +6,6 @@ import WatchImage from "@/components/WatchImage";
 import SectionHeading from "@/components/SectionHeading";
 import Icon from "@/components/Icon";
 import CardSwap from "@/components/CardSwap";
-import Newsletter from "@/components/Newsletter";
 
 function shuffleArray(array) {
   const shuffled = [...array];
@@ -231,7 +230,7 @@ export default async function Home() {
 
       <section className="editorial-section mx-auto w-full max-w-7xl px-6 sm:px-8 bg-[#f0f5f2]">
         <div>
-          <p className="eyebrow">FROM THE JOURNAL</p>
+          <p className="eyebrow">about aurade</p>
           <h2>
             The art of
             <br />
@@ -241,12 +240,12 @@ export default async function Home() {
             A few thoughts on proportion, personal style and finding a watch
             that feels like you.
           </p>
-          <Link href="/journal" className="text-link">
-            Read the journal <Icon name="arrow" />
+          <Link href="/about" className="text-link">
+            About Aurade <Icon name="arrow" />
           </Link>
         </div>
         <Link
-          href="/journal/finding-your-signature"
+          href="/about"
           className="editorial-image"
         >
           <WatchImage
@@ -254,11 +253,10 @@ export default async function Home() {
             alt="Blue-dial watch with a leather strap"
           />
           <span>
-            01 / Finding your signature <Icon name="arrow" />
+           Discover US <Icon name="arrow" />
           </span>
         </Link>
       </section>
-      <Newsletter />
     </>
   );
 }
